@@ -1,0 +1,125 @@
+[THREAD] Main poll: ident=140471171560896 native=5585
+[TIMING] BPF init CPU: 0.017s  wall: 0.054s
+[TIMING] Setup CPU: 0.000s  wall: 0.000s
+Starting to poll... (Ctrl+C to stop)
+CPU [0] UID 1000 comm: sudo
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [0] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+[TIMING] Poll loop CPU: 0.125s  wall: 1.973s
+[TIMING] Total CPU: 0.142s  wall: 2.028s
+[SUMMARY] Events in using perf
+
+ Performance counter stats for '/root/experiment/.venv/bin/python perf_timed_execve.py':
+
+            486.68 msec task-clock                                                            
+       653,865,972      cycles                                                                
+       524,584,293      instructions                                                          
+             7,381      page-faults                                                           
+             7,381      minor-faults                                                          
+             1,744      context-switches                                                      
+                 5      cpu-migrations                                                        
+
+       2.363598064 seconds time elapsed
+
+       0.240498000 seconds user
+       0.217904000 seconds sys
+
+

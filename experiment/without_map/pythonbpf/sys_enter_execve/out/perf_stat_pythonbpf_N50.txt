@@ -1,0 +1,27 @@
+=== impl=pythonbpf N=50 ===
+=== date: 2026-10-07T12:23:30+00:00 ===
+=== shape: per-task perf stat on BPF script; gen_exec 50 fires during window ===
+[THREAD] Main poll: ident=140286655911360 native=4013854
+[TIMING] BPF init CPU: 0.018s  wall: 0.056s
+[TIMING] Setup CPU: 0.000s  wall: 0.000s
+Starting to poll... (Ctrl+C to stop)
+[TIMING] Poll loop CPU: 0.063s  wall: 1.158s
+[TIMING] Total CPU: 0.082s  wall: 1.214s
+[SUMMARY] Events in using perf
+
+ Performance counter stats for '/root/experiment/.venv/bin/python perf_timed_execve.py':
+
+            419.26 msec task-clock                                                            
+       592,974,438      cycles                                                                
+       512,318,198      instructions                                                          
+             6,187      page-faults                                                           
+             6,187      minor-faults                                                          
+             1,014      context-switches                                                      
+                 1      cpu-migrations                                                        
+
+       1.550161398 seconds time elapsed
+
+       0.255549000 seconds user
+       0.146483000 seconds sys
+
+

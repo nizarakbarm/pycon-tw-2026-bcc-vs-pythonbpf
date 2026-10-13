@@ -1,0 +1,69 @@
+Possibly lost 1552 samples
+Possibly lost 1355 samples
+Possibly lost 1101 samples
+Possibly lost 1322 samples
+Possibly lost 251 samples
+Possibly lost 1099 samples
+Possibly lost 919 samples
+Possibly lost 1296 samples
+Possibly lost 3067 samples
+Possibly lost 318 samples
+Possibly lost 969 samples
+Possibly lost 634 samples
+Possibly lost 971 samples
+Possibly lost 101 samples
+Possibly lost 765 samples
+Possibly lost 825 samples
+Possibly lost 702 samples
+Possibly lost 690 samples
+Possibly lost 1261 samples
+Possibly lost 1229 samples
+Possibly lost 4863 samples
+Possibly lost 7 samples
+Possibly lost 36 samples
+Possibly lost 432 samples
+Possibly lost 4 samples
+Possibly lost 20 samples
+Possibly lost 28 samples
+Possibly lost 20 samples
+Possibly lost 2055 samples
+Possibly lost 19 samples
+Possibly lost 902 samples
+Possibly lost 125 samples
+Possibly lost 3 samples
+Possibly lost 613 samples
+Possibly lost 25 samples
+Possibly lost 434 samples
+Possibly lost 7027 samples
+Possibly lost 6 samples
+Possibly lost 107 samples
+Possibly lost 1192 samples
+Possibly lost 1199 samples
+Possibly lost 21 samples
+Possibly lost 4 samples
+Possibly lost 3766 samples
+Possibly lost 1 samples
+Possibly lost 413 samples
+	Command being timed: "/root/experiment/.venv/bin/python perf_timed_unlink.py"
+	User time (seconds): 12.35
+	System time (seconds): 1.69
+	Percent of CPU this job got: 64%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:21.85
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 190644
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 13798
+	Voluntary context switches: 47935
+	Involuntary context switches: 711
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 129880
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

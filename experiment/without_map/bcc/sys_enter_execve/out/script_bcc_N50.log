@@ -1,0 +1,75 @@
+[THREAD] Main poll: ident=140264432453056 native=5512
+[TIMING] BPF init CPU: 0.420s wall: 0.420s
+[TIMING] Setup CPU: 0.001s wall: 0.001s
+Starting to poll... (Ctrl+C top stop)
+CPU [0] UID 1000 comm: sudo
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [1] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+CPU [2] UID 1000 comm: gen_exec
+[TIMING] Poll loop CPU 0.164s wall: 1.899s
+[TIMING] Total CPU: 0.585s wall: 2.320s
+[SUMMARY] Events in using perf only
+
+ Performance counter stats for '/root/experiment/.venv/bin/python perf_timed_execve.py':
+
+            982.85 msec task-clock                                                            
+     1,735,070,860      cycles                                                                
+     1,825,394,359      instructions                                                          
+            15,396      page-faults                                                           
+            15,396      minor-faults                                                          
+             1,563      context-switches                                                      
+                 5      cpu-migrations                                                        
+
+       2.749329184 seconds time elapsed
+
+       0.562993000 seconds user
+       0.394652000 seconds sys
+
+

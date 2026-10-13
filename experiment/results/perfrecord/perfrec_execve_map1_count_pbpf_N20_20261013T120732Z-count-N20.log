@@ -1,0 +1,34 @@
+[THREAD] Main poll: ident=140301029877184 native=2248453
+[TIMING] BPF init CPU: 0.025s  wall: 0.070s
+[RUSAGE] init maxrss=22148KB minflt=3420 majflt=2 inblock=16 oublock=8 nvcsw=8 nivcsw=31 utime=0.332s stime=0.073s | children utime=0.024s stime=0.020s maxrss=79944KB
+[TIMING] Setup CPU: 0.000s  wall: 0.000s
+[RUSAGE] setup maxrss=22148KB minflt=3420 majflt=2 inblock=16 oublock=8 nvcsw=8 nivcsw=31 utime=0.332s stime=0.073s | children utime=0.024s stime=0.020s maxrss=79944KB
+Starting to poll... (Ctrl+C to stop)
+CPU [2] UID 1000, comm: sudo, count: 0
+CPU [0] UID 1000, comm: gen_exec, count: 1
+CPU [0] UID 1000, comm: gen_exec, count: 2
+CPU [0] UID 1000, comm: gen_exec, count: 3
+CPU [0] UID 1000, comm: gen_exec, count: 4
+CPU [0] UID 1000, comm: gen_exec, count: 5
+CPU [0] UID 1000, comm: gen_exec, count: 6
+CPU [0] UID 1000, comm: gen_exec, count: 7
+CPU [0] UID 1000, comm: gen_exec, count: 8
+CPU [0] UID 1000, comm: gen_exec, count: 9
+CPU [0] UID 1000, comm: gen_exec, count: 10
+CPU [0] UID 1000, comm: gen_exec, count: 11
+CPU [0] UID 1000, comm: gen_exec, count: 12
+CPU [0] UID 1000, comm: gen_exec, count: 13
+CPU [0] UID 1000, comm: gen_exec, count: 14
+CPU [0] UID 1000, comm: gen_exec, count: 15
+CPU [0] UID 1000, comm: gen_exec, count: 16
+CPU [1] UID 1000, comm: gen_exec, count: 17
+CPU [0] UID 1000, comm: gen_exec, count: 18
+CPU [0] UID 1000, comm: gen_exec, count: 19
+CPU [0] UID 1000, comm: gen_exec, count: 20
+[TIMING] Poll loop CPU: 0.067s  wall: 1.258s
+[RUSAGE] poll maxrss=22148KB minflt=3423 majflt=2 inblock=16 oublock=8 nvcsw=1095 nivcsw=32 utime=0.332s stime=0.140s | children utime=0.024s stime=0.020s maxrss=79944KB
+[TIMING] Total CPU: 0.092s  wall: 1.328s
+[SUMMARY] Events in map: 21
+[RUSAGE] after-summary maxrss=22148KB minflt=3423 majflt=2 inblock=16 oublock=8 nvcsw=1095 nivcsw=32 utime=0.332s stime=0.140s | children utime=0.024s stime=0.020s maxrss=79944KB
+[ perf record: Woken up 3 times to write data ]
+[ perf record: Captured and wrote 0.694 MB /root/experiment/results/perfrecord/perfrec_execve_map1_count_pbpf_N20_20261013T120732Z-count-N20.data (79 samples) ]

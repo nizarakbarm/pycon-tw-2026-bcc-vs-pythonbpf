@@ -1,0 +1,57 @@
+[THREAD] Main poll: ident=140652164613568 native=3830137
+[TIMING] BPF init CPU: 0.016s  wall: 0.045s
+[TIMING] Setup CPU: 0.000s  wall: 0.000s
+Starting to poll... (Ctrl+C to stop)
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+CPU [0] UID 1000 comm: gen_unlink
+[TIMING] Poll loop CPU: 0.069s  wall: 2.374s
+[TIMING] Total CPU: 0.085s  wall: 2.418s
+[SUMMARY] Events in using perf

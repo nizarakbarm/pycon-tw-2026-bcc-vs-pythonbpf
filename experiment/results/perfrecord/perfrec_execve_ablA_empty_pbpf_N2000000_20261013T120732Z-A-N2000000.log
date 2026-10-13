@@ -1,0 +1,13 @@
+[THREAD] Main poll: ident=140695909094848 native=4080159
+[TIMING] BPF init CPU: 0.022s  wall: 0.166s
+[RUSAGE] init maxrss=22184KB minflt=3430 majflt=4 inblock=64 oublock=0 nvcsw=10 nivcsw=3 utime=0.316s stime=0.085s | children utime=0.027s stime=0.036s maxrss=66356KB
+[TIMING] Setup CPU: 0.000s  wall: 0.000s
+[RUSAGE] setup maxrss=22184KB minflt=3430 majflt=4 inblock=64 oublock=8 nvcsw=10 nivcsw=3 utime=0.316s stime=0.085s | children utime=0.027s stime=0.036s maxrss=66356KB
+Starting to poll... (Ctrl+C to stop)
+[TIMING] Poll loop CPU: 196.829s  wall: 1663.529s
+[RUSAGE] poll maxrss=22184KB minflt=3436 majflt=4 inblock=64 oublock=8 nvcsw=2098523 nivcsw=7363 utime=81.567s stime=115.663s | children utime=0.027s stime=0.036s maxrss=66356KB
+[TIMING] Total CPU: 196.852s  wall: 1663.695s
+[SUMMARY] Events in map: 2000001
+[RUSAGE] after-summary maxrss=22184KB minflt=3436 majflt=4 inblock=64 oublock=16 nvcsw=2098523 nivcsw=7363 utime=81.567s stime=115.663s | children utime=0.027s stime=0.036s maxrss=66356KB
+[ perf record: Woken up 706 times to write data ]
+[ perf record: Captured and wrote 176.596 MB /root/experiment/results/perfrecord/perfrec_execve_ablA_empty_pbpf_N2000000_20261013T120732Z-A-N2000000.data (21883 samples) ]

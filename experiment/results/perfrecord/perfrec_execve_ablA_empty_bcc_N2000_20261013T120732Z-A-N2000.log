@@ -1,0 +1,14 @@
+[THREAD] Main poll: ident=140035926640064 native=2260499
+[TIMING] BPF init CPU: 0.504s  wall: 0.504s
+[RUSAGE] init maxrss=165324KB minflt=14138 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=8 utime=0.602s stime=0.259s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=165324KB minflt=14138 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=8 utime=0.602s stime=0.259s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+[TIMING] Poll loop CPU: 0.285s  wall: 3.646s
+[RUSAGE] poll maxrss=165324KB minflt=14141 majflt=0 inblock=0 oublock=8 nvcsw=3583 nivcsw=18 utime=0.737s stime=0.408s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 0.790s  wall: 4.151s
+[SUMMARY] Events in map: 2001
+[RUSAGE] after-summary maxrss=165324KB minflt=14142 majflt=0 inblock=0 oublock=8 nvcsw=3583 nivcsw=18 utime=0.737s stime=0.409s | children utime=0.000s stime=0.000s maxrss=0KB
+[ perf record: Woken up 5 times to write data ]
+cmd__addr2line /usr/lib/debug/usr/lib64/libpython3.13.so.1.0.debug: could not read first record
+[ perf record: Captured and wrote 1.518 MB /root/experiment/results/perfrecord/perfrec_execve_ablA_empty_bcc_N2000_20261013T120732Z-A-N2000.data (181 samples) ]

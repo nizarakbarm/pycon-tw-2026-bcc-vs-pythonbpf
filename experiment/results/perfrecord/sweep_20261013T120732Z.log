@@ -1,0 +1,557 @@
+[PASS3 START] BASE_TAG=20261013T120732Z host=nono1 variants='count A B' small='20 50 100 1000 2000' big='2000000' freq=199 T=1 2026-10-13T12:07:32+00:00
+[PASS3 VAR=count N=20] 2026-10-13T12:07:32+00:00
+[START] TAG=20261013T120732Z-count-N20 host=nono1 VAR=count (map1_count) N=20 freq=199 cg=dwarf T=1s 2026-10-13T12:07:32+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=20 summary=21 (expect 21) perf_samples=154 data=1.4M
+    [TIMING] BPF init CPU: 0.490s  wall: 0.490s
+    [RUSAGE] init maxrss=164856KB minflt=18931 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.584s stime=0.298s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=164856KB minflt=18931 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.584s stime=0.298s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.112s  wall: 1.761s
+    [RUSAGE] poll maxrss=164856KB minflt=18935 majflt=0 inblock=0 oublock=8 nvcsw=1459 nivcsw=4 utime=0.639s stime=0.355s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.604s  wall: 2.252s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=164856KB minflt=18936 majflt=0 inblock=0 oublock=8 nvcsw=1459 nivcsw=4 utime=0.639s stime=0.355s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N20_20261013T120732Z-count-N20.svg folded_lines=120
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=20 summary=21 (expect 21) perf_samples=79 data=728K
+    [TIMING] BPF init CPU: 0.025s  wall: 0.070s
+    [RUSAGE] init maxrss=22148KB minflt=3420 majflt=2 inblock=16 oublock=8 nvcsw=8 nivcsw=31 utime=0.332s stime=0.073s | children utime=0.024s stime=0.020s maxrss=79944KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22148KB minflt=3420 majflt=2 inblock=16 oublock=8 nvcsw=8 nivcsw=31 utime=0.332s stime=0.073s | children utime=0.024s stime=0.020s maxrss=79944KB
+    [TIMING] Poll loop CPU: 0.067s  wall: 1.258s
+    [RUSAGE] poll maxrss=22148KB minflt=3423 majflt=2 inblock=16 oublock=8 nvcsw=1095 nivcsw=32 utime=0.332s stime=0.140s | children utime=0.024s stime=0.020s maxrss=79944KB
+    [TIMING] Total CPU: 0.092s  wall: 1.328s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=22148KB minflt=3423 majflt=2 inblock=16 oublock=8 nvcsw=1095 nivcsw=32 utime=0.332s stime=0.140s | children utime=0.024s stime=0.020s maxrss=79944KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N20_20261013T120732Z-count-N20.svg folded_lines=67
+[ALL-DONE] TAG=20261013T120732Z-count-N20 VAR=count N=20 2026-10-13T12:08:47+00:00
+[PASS3 VAR=count N=50] 2026-10-13T12:08:47+00:00
+[START] TAG=20261013T120732Z-count-N50 host=nono1 VAR=count (map1_count) N=50 freq=199 cg=dwarf T=1s 2026-10-13T12:08:47+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=50 summary=51 (expect 51) perf_samples=154 data=1.4M
+    [TIMING] BPF init CPU: 0.492s  wall: 0.492s
+    [RUSAGE] init maxrss=166320KB minflt=14197 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.568s stime=0.271s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=166320KB minflt=14197 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.568s stime=0.271s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.128s  wall: 1.919s
+    [RUSAGE] poll maxrss=166320KB minflt=14202 majflt=0 inblock=0 oublock=8 nvcsw=1573 nivcsw=8 utime=0.626s stime=0.341s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.621s  wall: 2.412s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=166320KB minflt=14203 majflt=0 inblock=0 oublock=8 nvcsw=1573 nivcsw=8 utime=0.626s stime=0.341s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N50_20261013T120732Z-count-N50.svg folded_lines=115
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=50 summary=51 (expect 51) perf_samples=93 data=844K
+    [TIMING] BPF init CPU: 0.028s  wall: 0.069s
+    [RUSAGE] init maxrss=22364KB minflt=3424 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=0 utime=0.387s stime=0.067s | children utime=0.023s stime=0.018s maxrss=79956KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=22364KB minflt=3424 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=0 utime=0.387s stime=0.067s | children utime=0.023s stime=0.018s maxrss=79956KB
+    [TIMING] Poll loop CPU: 0.060s  wall: 1.262s
+    [RUSAGE] poll maxrss=22364KB minflt=3427 majflt=0 inblock=0 oublock=8 nvcsw=1037 nivcsw=2 utime=0.388s stime=0.126s | children utime=0.023s stime=0.018s maxrss=79956KB
+    [TIMING] Total CPU: 0.088s  wall: 1.331s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=22364KB minflt=3427 majflt=0 inblock=0 oublock=8 nvcsw=1037 nivcsw=2 utime=0.388s stime=0.126s | children utime=0.023s stime=0.018s maxrss=79956KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N50_20261013T120732Z-count-N50.svg folded_lines=77
+[ALL-DONE] TAG=20261013T120732Z-count-N50 VAR=count N=50 2026-10-13T12:10:01+00:00
+[PASS3 VAR=count N=100] 2026-10-13T12:10:01+00:00
+[START] TAG=20261013T120732Z-count-N100 host=nono1 VAR=count (map1_count) N=100 freq=199 cg=dwarf T=1s 2026-10-13T12:10:01+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=100 summary=101 (expect 101) perf_samples=186 data=1.6M
+    [TIMING] BPF init CPU: 0.640s  wall: 0.640s
+    [RUSAGE] init maxrss=166356KB minflt=14192 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.699s stime=0.304s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.002s  wall: 0.002s
+    [RUSAGE] setup maxrss=166356KB minflt=14192 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.699s stime=0.304s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.124s  wall: 1.798s
+    [RUSAGE] poll maxrss=166356KB minflt=14198 majflt=0 inblock=0 oublock=16 nvcsw=1467 nivcsw=5 utime=0.760s stime=0.368s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.765s  wall: 2.440s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=166356KB minflt=14199 majflt=0 inblock=0 oublock=16 nvcsw=1467 nivcsw=5 utime=0.760s stime=0.368s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N100_20261013T120732Z-count-N100.svg folded_lines=137
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=100 summary=101 (expect 101) perf_samples=87 data=792K
+    [TIMING] BPF init CPU: 0.022s  wall: 0.061s
+    [RUSAGE] init maxrss=22208KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=2 utime=0.260s stime=0.079s | children utime=0.024s stime=0.015s maxrss=79964KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22208KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=2 utime=0.260s stime=0.079s | children utime=0.024s stime=0.015s maxrss=79964KB
+    [TIMING] Poll loop CPU: 0.072s  wall: 1.380s
+    [RUSAGE] poll maxrss=22208KB minflt=3426 majflt=0 inblock=0 oublock=16 nvcsw=1208 nivcsw=4 utime=0.277s stime=0.134s | children utime=0.024s stime=0.015s maxrss=79964KB
+    [TIMING] Total CPU: 0.094s  wall: 1.441s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=22208KB minflt=3426 majflt=0 inblock=0 oublock=16 nvcsw=1208 nivcsw=4 utime=0.277s stime=0.134s | children utime=0.024s stime=0.015s maxrss=79964KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N100_20261013T120732Z-count-N100.svg folded_lines=69
+[ALL-DONE] TAG=20261013T120732Z-count-N100 VAR=count N=100 2026-10-13T12:11:14+00:00
+[PASS3 VAR=count N=1000] 2026-10-13T12:11:14+00:00
+[START] TAG=20261013T120732Z-count-N1000 host=nono1 VAR=count (map1_count) N=1000 freq=199 cg=dwarf T=1s 2026-10-13T12:11:14+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=1000 summary=1001 (expect 1001) perf_samples=191 data=1.7M
+    [TIMING] BPF init CPU: 0.545s  wall: 0.545s
+    [RUSAGE] init maxrss=164972KB minflt=13856 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.624s stime=0.255s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=164972KB minflt=13856 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.624s stime=0.255s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.232s  wall: 2.806s
+    [RUSAGE] poll maxrss=164972KB minflt=13864 majflt=0 inblock=0 oublock=88 nvcsw=2595 nivcsw=15 utime=0.740s stime=0.370s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.778s  wall: 3.352s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=164972KB minflt=13866 majflt=0 inblock=0 oublock=88 nvcsw=2595 nivcsw=15 utime=0.740s stime=0.371s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N1000_20261013T120732Z-count-N1000.svg folded_lines=150
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=1000 summary=1001 (expect 1001) perf_samples=109 data=976K
+    [TIMING] BPF init CPU: 0.026s  wall: 0.084s
+    [RUSAGE] init maxrss=22196KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=39 utime=0.276s stime=0.133s | children utime=0.029s stime=0.026s maxrss=79932KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22196KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=39 utime=0.276s stime=0.133s | children utime=0.029s stime=0.026s maxrss=79932KB
+    [TIMING] Poll loop CPU: 0.158s  wall: 2.178s
+    [RUSAGE] poll maxrss=22196KB minflt=3426 majflt=0 inblock=0 oublock=96 nvcsw=2033 nivcsw=49 utime=0.323s stime=0.244s | children utime=0.029s stime=0.026s maxrss=79932KB
+    [TIMING] Total CPU: 0.184s  wall: 2.262s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=22196KB minflt=3426 majflt=0 inblock=0 oublock=96 nvcsw=2033 nivcsw=49 utime=0.324s stime=0.244s | children utime=0.029s stime=0.026s maxrss=79932KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N1000_20261013T120732Z-count-N1000.svg folded_lines=96
+[ALL-DONE] TAG=20261013T120732Z-count-N1000 VAR=count N=1000 2026-10-13T12:12:30+00:00
+[PASS3 VAR=count N=2000] 2026-10-13T12:12:30+00:00
+[START] TAG=20261013T120732Z-count-N2000 host=nono1 VAR=count (map1_count) N=2000 freq=199 cg=dwarf T=1s 2026-10-13T12:12:30+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=2000 summary=2001 (expect 2001) perf_samples=202 data=1.8M
+    [TIMING] BPF init CPU: 0.518s  wall: 0.519s
+    [RUSAGE] init maxrss=165124KB minflt=13905 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.574s stime=0.256s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=165124KB minflt=13905 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.574s stime=0.256s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.346s  wall: 3.766s
+    [RUSAGE] poll maxrss=165124KB minflt=13913 majflt=0 inblock=0 oublock=176 nvcsw=3592 nivcsw=40 utime=0.748s stime=0.429s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.866s  wall: 4.286s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=165124KB minflt=13914 majflt=0 inblock=0 oublock=176 nvcsw=3592 nivcsw=40 utime=0.749s stime=0.429s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N2000_20261013T120732Z-count-N2000.svg folded_lines=151
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=2000 summary=2001 (expect 2001) perf_samples=81 data=744K
+    [TIMING] BPF init CPU: 0.021s  wall: 0.057s
+    [RUSAGE] init maxrss=22372KB minflt=3425 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=34 utime=0.343s stime=0.100s | children utime=0.022s stime=0.015s maxrss=79960KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22372KB minflt=3425 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=34 utime=0.343s stime=0.100s | children utime=0.022s stime=0.015s maxrss=79960KB
+    [TIMING] Poll loop CPU: 0.144s  wall: 2.694s
+    [RUSAGE] poll maxrss=22372KB minflt=3427 majflt=0 inblock=0 oublock=184 nvcsw=2812 nivcsw=60 utime=0.372s stime=0.214s | children utime=0.022s stime=0.015s maxrss=79960KB
+    [TIMING] Total CPU: 0.165s  wall: 2.751s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=22372KB minflt=3427 majflt=0 inblock=0 oublock=184 nvcsw=2812 nivcsw=60 utime=0.372s stime=0.214s | children utime=0.022s stime=0.015s maxrss=79960KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N2000_20261013T120732Z-count-N2000.svg folded_lines=73
+[ALL-DONE] TAG=20261013T120732Z-count-N2000 VAR=count N=2000 2026-10-13T12:13:48+00:00
+[PASS3 VAR=A N=20] 2026-10-13T12:13:48+00:00
+[START] TAG=20261013T120732Z-A-N20 host=nono1 VAR=A (ablA_empty) N=20 freq=199 cg=dwarf T=1s 2026-10-13T12:13:48+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=20 summary=21 (expect 21) perf_samples=116 data=1.1M
+    [TIMING] BPF init CPU: 0.397s  wall: 0.400s
+    [RUSAGE] init maxrss=165640KB minflt=14012 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=118 utime=0.498s stime=0.233s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=165640KB minflt=14012 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=118 utime=0.498s stime=0.233s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.097s  wall: 1.993s
+    [RUSAGE] poll maxrss=165640KB minflt=14014 majflt=0 inblock=0 oublock=8 nvcsw=1574 nivcsw=124 utime=0.536s stime=0.292s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.496s  wall: 2.394s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=165640KB minflt=14015 majflt=0 inblock=0 oublock=8 nvcsw=1574 nivcsw=124 utime=0.536s stime=0.292s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N20_20261013T120732Z-A-N20.svg folded_lines=93
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=20 summary=21 (expect 21) perf_samples=528 data=4.4M
+    [TIMING] BPF init CPU: 0.025s  wall: 0.060s
+    [RUSAGE] init maxrss=22268KB minflt=3430 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=4 utime=0.357s stime=0.072s | children utime=0.020s stime=0.015s maxrss=79968KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22268KB minflt=3430 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=4 utime=0.357s stime=0.072s | children utime=0.020s stime=0.015s maxrss=79968KB
+    [TIMING] Poll loop CPU: 4.385s  wall: 62.113s
+    [RUSAGE] poll maxrss=22396KB minflt=3434 majflt=0 inblock=0 oublock=8 nvcsw=50969 nivcsw=30 utime=1.759s stime=3.056s | children utime=0.020s stime=0.015s maxrss=79968KB
+    [TIMING] Total CPU: 4.411s  wall: 62.173s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=22396KB minflt=3434 majflt=0 inblock=0 oublock=16 nvcsw=50969 nivcsw=30 utime=1.759s stime=3.056s | children utime=0.020s stime=0.015s maxrss=79968KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N20_20261013T120732Z-A-N20.svg folded_lines=218
+[ALL-DONE] TAG=20261013T120732Z-A-N20 VAR=A N=20 2026-10-13T12:16:02+00:00
+[PASS3 VAR=A N=50] 2026-10-13T12:16:02+00:00
+[START] TAG=20261013T120732Z-A-N50 host=nono1 VAR=A (ablA_empty) N=50 freq=199 cg=dwarf T=1s 2026-10-13T12:16:02+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=50 summary=51 (expect 51) perf_samples=151 data=1.3M
+    [TIMING] BPF init CPU: 0.465s  wall: 0.466s
+    [RUSAGE] init maxrss=166560KB minflt=14264 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=18 utime=0.496s stime=0.223s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=166560KB minflt=14264 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=18 utime=0.496s stime=0.223s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.126s  wall: 2.041s
+    [RUSAGE] poll maxrss=166560KB minflt=14268 majflt=0 inblock=0 oublock=8 nvcsw=1656 nivcsw=23 utime=0.557s stime=0.287s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.593s  wall: 2.509s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=166560KB minflt=14269 majflt=0 inblock=0 oublock=8 nvcsw=1656 nivcsw=23 utime=0.558s stime=0.287s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N50_20261013T120732Z-A-N50.svg folded_lines=114
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=50 summary=51 (expect 51) perf_samples=553 data=4.6M
+    [TIMING] BPF init CPU: 0.020s  wall: 0.070s
+    [RUSAGE] init maxrss=22176KB minflt=3434 majflt=5 inblock=4600 oublock=0 nvcsw=103 nivcsw=7 utime=0.282s stime=0.110s | children utime=0.021s stime=0.020s maxrss=79932KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22176KB minflt=3434 majflt=5 inblock=4600 oublock=8 nvcsw=103 nivcsw=7 utime=0.282s stime=0.110s | children utime=0.021s stime=0.020s maxrss=79932KB
+    [TIMING] Poll loop CPU: 3.068s  wall: 61.740s
+    [RUSAGE] poll maxrss=22176KB minflt=3438 majflt=5 inblock=4600 oublock=8 nvcsw=52184 nivcsw=37 utime=1.268s stime=2.192s | children utime=0.021s stime=0.020s maxrss=79932KB
+    [TIMING] Total CPU: 3.088s  wall: 61.810s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=22176KB minflt=3438 majflt=5 inblock=4600 oublock=16 nvcsw=52184 nivcsw=37 utime=1.268s stime=2.192s | children utime=0.021s stime=0.020s maxrss=79932KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N50_20261013T120732Z-A-N50.svg folded_lines=231
+[ALL-DONE] TAG=20261013T120732Z-A-N50 VAR=A N=50 2026-10-13T12:18:19+00:00
+[PASS3 VAR=A N=100] 2026-10-13T12:18:19+00:00
+[START] TAG=20261013T120732Z-A-N100 host=nono1 VAR=A (ablA_empty) N=100 freq=199 cg=dwarf T=1s 2026-10-13T12:18:19+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=100 summary=101 (expect 101) perf_samples=165 data=1.5M
+    [TIMING] BPF init CPU: 0.539s  wall: 0.605s
+    [RUSAGE] init maxrss=164504KB minflt=13918 majflt=39 inblock=47640 oublock=8 nvcsw=284 nivcsw=12 utime=0.587s stime=0.282s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.002s  wall: 0.002s
+    [RUSAGE] setup maxrss=164504KB minflt=13919 majflt=39 inblock=47640 oublock=8 nvcsw=284 nivcsw=12 utime=0.587s stime=0.282s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.112s  wall: 1.798s
+    [RUSAGE] poll maxrss=164504KB minflt=13922 majflt=39 inblock=47640 oublock=8 nvcsw=1784 nivcsw=12 utime=0.641s stime=0.340s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.654s  wall: 2.405s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=164504KB minflt=13923 majflt=39 inblock=47640 oublock=8 nvcsw=1784 nivcsw=12 utime=0.641s stime=0.340s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N100_20261013T120732Z-A-N100.svg folded_lines=121
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=100 summary=101 (expect 101) perf_samples=579 data=4.8M
+    [TIMING] BPF init CPU: 0.022s  wall: 0.064s
+    [RUSAGE] init maxrss=22184KB minflt=3432 majflt=5 inblock=5008 oublock=0 nvcsw=125 nivcsw=2 utime=0.289s stime=0.085s | children utime=0.018s stime=0.021s maxrss=79700KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22184KB minflt=3432 majflt=5 inblock=5008 oublock=8 nvcsw=125 nivcsw=2 utime=0.289s stime=0.085s | children utime=0.018s stime=0.021s maxrss=79700KB
+    [TIMING] Poll loop CPU: 3.138s  wall: 61.895s
+    [RUSAGE] poll maxrss=22184KB minflt=3436 majflt=5 inblock=5008 oublock=8 nvcsw=51582 nivcsw=39 utime=1.327s stime=2.186s | children utime=0.018s stime=0.021s maxrss=79700KB
+    [TIMING] Total CPU: 3.161s  wall: 61.959s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=22184KB minflt=3436 majflt=5 inblock=5008 oublock=16 nvcsw=51582 nivcsw=39 utime=1.327s stime=2.186s | children utime=0.018s stime=0.021s maxrss=79700KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N100_20261013T120732Z-A-N100.svg folded_lines=230
+[ALL-DONE] TAG=20261013T120732Z-A-N100 VAR=A N=100 2026-10-13T12:20:37+00:00
+[PASS3 VAR=A N=1000] 2026-10-13T12:20:37+00:00
+[START] TAG=20261013T120732Z-A-N1000 host=nono1 VAR=A (ablA_empty) N=1000 freq=199 cg=dwarf T=1s 2026-10-13T12:20:37+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=1000 summary=1001 (expect 1001) perf_samples=172 data=1.5M
+    [TIMING] BPF init CPU: 0.493s  wall: 0.493s
+    [RUSAGE] init maxrss=166024KB minflt=14320 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.607s stime=0.276s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=166024KB minflt=14320 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.607s stime=0.276s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.204s  wall: 2.717s
+    [RUSAGE] poll maxrss=166024KB minflt=14323 majflt=0 inblock=0 oublock=8 nvcsw=2527 nivcsw=9 utime=0.711s stime=0.376s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.698s  wall: 3.212s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=166024KB minflt=14324 majflt=0 inblock=0 oublock=8 nvcsw=2527 nivcsw=9 utime=0.711s stime=0.376s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N1000_20261013T120732Z-A-N1000.svg folded_lines=128
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=1000 summary=1001 (expect 1001) perf_samples=588 data=4.9M
+    [TIMING] BPF init CPU: 0.027s  wall: 0.092s
+    [RUSAGE] init maxrss=22276KB minflt=3431 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=0 utime=0.300s stime=0.086s | children utime=0.033s stime=0.022s maxrss=79692KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=22276KB minflt=3431 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=0 utime=0.300s stime=0.087s | children utime=0.033s stime=0.022s maxrss=79692KB
+    [TIMING] Poll loop CPU: 4.466s  wall: 62.977s
+    [RUSAGE] poll maxrss=22276KB minflt=3434 majflt=0 inblock=0 oublock=8 nvcsw=51739 nivcsw=36 utime=1.846s stime=3.006s | children utime=0.033s stime=0.022s maxrss=79692KB
+    [TIMING] Total CPU: 4.494s  wall: 63.070s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=22276KB minflt=3434 majflt=0 inblock=0 oublock=16 nvcsw=51739 nivcsw=36 utime=1.846s stime=3.006s | children utime=0.033s stime=0.022s maxrss=79692KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N1000_20261013T120732Z-A-N1000.svg folded_lines=238
+[ALL-DONE] TAG=20261013T120732Z-A-N1000 VAR=A N=1000 2026-10-13T12:22:54+00:00
+[PASS3 VAR=A N=2000] 2026-10-13T12:22:54+00:00
+[START] TAG=20261013T120732Z-A-N2000 host=nono1 VAR=A (ablA_empty) N=2000 freq=199 cg=dwarf T=1s 2026-10-13T12:22:54+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=2000 summary=2001 (expect 2001) perf_samples=181 data=1.6M
+    [TIMING] BPF init CPU: 0.504s  wall: 0.504s
+    [RUSAGE] init maxrss=165324KB minflt=14138 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=8 utime=0.602s stime=0.259s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=165324KB minflt=14138 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=8 utime=0.602s stime=0.259s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.285s  wall: 3.646s
+    [RUSAGE] poll maxrss=165324KB minflt=14141 majflt=0 inblock=0 oublock=8 nvcsw=3583 nivcsw=18 utime=0.737s stime=0.408s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.790s  wall: 4.151s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=165324KB minflt=14142 majflt=0 inblock=0 oublock=8 nvcsw=3583 nivcsw=18 utime=0.737s stime=0.409s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N2000_20261013T120732Z-A-N2000.svg folded_lines=142
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=2000 summary=2001 (expect 2001) perf_samples=610 data=5.0M
+    [TIMING] BPF init CPU: 0.034s  wall: 0.089s
+    [RUSAGE] init maxrss=22096KB minflt=3434 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=6 utime=0.520s stime=0.115s | children utime=0.033s stime=0.022s maxrss=79680KB
+    [TIMING] Setup CPU: 0.004s  wall: 0.004s
+    [RUSAGE] setup maxrss=22096KB minflt=3434 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=6 utime=0.520s stime=0.115s | children utime=0.033s stime=0.022s maxrss=79680KB
+    [TIMING] Poll loop CPU: 4.110s  wall: 63.426s
+    [RUSAGE] poll maxrss=22096KB minflt=3437 majflt=0 inblock=0 oublock=8 nvcsw=52818 nivcsw=41 utime=1.892s stime=2.852s | children utime=0.033s stime=0.022s maxrss=79680KB
+    [TIMING] Total CPU: 4.148s  wall: 63.519s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=22096KB minflt=3437 majflt=0 inblock=0 oublock=16 nvcsw=52818 nivcsw=41 utime=1.892s stime=2.852s | children utime=0.033s stime=0.022s maxrss=79680KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N2000_20261013T120732Z-A-N2000.svg folded_lines=255
+[ALL-DONE] TAG=20261013T120732Z-A-N2000 VAR=A N=2000 2026-10-13T12:25:13+00:00
+[PASS3 VAR=B N=20] 2026-10-13T12:25:13+00:00
+[START] TAG=20261013T120732Z-B-N20 host=nono1 VAR=B (ablB_print_const) N=20 freq=199 cg=dwarf T=1s 2026-10-13T12:25:13+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=20 summary=21 (expect 21) perf_samples=148 data=1.3M
+    [TIMING] BPF init CPU: 0.481s  wall: 0.481s
+    [RUSAGE] init maxrss=164976KB minflt=14073 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=18 utime=0.583s stime=0.276s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.002s  wall: 0.002s
+    [RUSAGE] setup maxrss=164976KB minflt=14073 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=18 utime=0.583s stime=0.276s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.120s  wall: 1.818s
+    [RUSAGE] poll maxrss=164976KB minflt=14075 majflt=0 inblock=0 oublock=8 nvcsw=1501 nivcsw=20 utime=0.655s stime=0.325s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.603s  wall: 2.301s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=164976KB minflt=14076 majflt=0 inblock=0 oublock=8 nvcsw=1501 nivcsw=20 utime=0.655s stime=0.325s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N20_20261013T120732Z-B-N20.svg folded_lines=122
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=20 summary=21 (expect 21) perf_samples=567 data=4.7M
+    [TIMING] BPF init CPU: 0.025s  wall: 0.064s
+    [RUSAGE] init maxrss=22132KB minflt=3437 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=4 utime=0.309s stime=0.078s | children utime=0.028s stime=0.011s maxrss=79752KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22132KB minflt=3437 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=4 utime=0.309s stime=0.078s | children utime=0.028s stime=0.011s maxrss=79752KB
+    [TIMING] Poll loop CPU: 4.275s  wall: 61.954s
+    [RUSAGE] poll maxrss=22260KB minflt=3440 majflt=0 inblock=0 oublock=8 nvcsw=50820 nivcsw=50 utime=1.793s stime=2.869s | children utime=0.028s stime=0.011s maxrss=79752KB
+    [TIMING] Total CPU: 4.300s  wall: 62.018s
+    [SUMMARY] Events in map: 21
+    [RUSAGE] after-summary maxrss=22260KB minflt=3440 majflt=0 inblock=0 oublock=16 nvcsw=50820 nivcsw=50 utime=1.793s stime=2.869s | children utime=0.028s stime=0.011s maxrss=79752KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N20_20261013T120732Z-B-N20.svg folded_lines=231
+[ALL-DONE] TAG=20261013T120732Z-B-N20 VAR=B N=20 2026-10-13T12:27:28+00:00
+[PASS3 VAR=B N=50] 2026-10-13T12:27:28+00:00
+[START] TAG=20261013T120732Z-B-N50 host=nono1 VAR=B (ablB_print_const) N=50 freq=199 cg=dwarf T=1s 2026-10-13T12:27:28+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=50 summary=51 (expect 51) perf_samples=144 data=1.3M
+    [TIMING] BPF init CPU: 0.479s  wall: 0.479s
+    [RUSAGE] init maxrss=165500KB minflt=14209 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=17 utime=0.532s stime=0.226s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.002s  wall: 0.002s
+    [RUSAGE] setup maxrss=165500KB minflt=14209 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=17 utime=0.532s stime=0.226s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.132s  wall: 1.981s
+    [RUSAGE] poll maxrss=165500KB minflt=14212 majflt=0 inblock=0 oublock=8 nvcsw=1670 nivcsw=18 utime=0.588s stime=0.301s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.613s  wall: 2.462s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=165500KB minflt=14213 majflt=0 inblock=0 oublock=8 nvcsw=1670 nivcsw=18 utime=0.588s stime=0.301s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N50_20261013T120732Z-B-N50.svg folded_lines=117
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=50 summary=51 (expect 51) perf_samples=584 data=4.8M
+    [TIMING] BPF init CPU: 0.021s  wall: 0.056s
+    [RUSAGE] init maxrss=22108KB minflt=3432 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=1 utime=0.309s stime=0.075s | children utime=0.019s stime=0.017s maxrss=79656KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22108KB minflt=3432 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=1 utime=0.309s stime=0.075s | children utime=0.019s stime=0.017s maxrss=79656KB
+    [TIMING] Poll loop CPU: 3.630s  wall: 61.974s
+    [RUSAGE] poll maxrss=22108KB minflt=3435 majflt=0 inblock=0 oublock=8 nvcsw=51417 nivcsw=32 utime=1.516s stime=2.497s | children utime=0.019s stime=0.017s maxrss=79656KB
+    [TIMING] Total CPU: 3.651s  wall: 62.030s
+    [SUMMARY] Events in map: 51
+    [RUSAGE] after-summary maxrss=22108KB minflt=3435 majflt=0 inblock=0 oublock=16 nvcsw=51417 nivcsw=32 utime=1.516s stime=2.497s | children utime=0.019s stime=0.017s maxrss=79656KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N50_20261013T120732Z-B-N50.svg folded_lines=244
+[ALL-DONE] TAG=20261013T120732Z-B-N50 VAR=B N=50 2026-10-13T12:29:45+00:00
+[PASS3 VAR=B N=100] 2026-10-13T12:29:45+00:00
+[START] TAG=20261013T120732Z-B-N100 host=nono1 VAR=B (ablB_print_const) N=100 freq=199 cg=dwarf T=1s 2026-10-13T12:29:45+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=100 summary=101 (expect 101) perf_samples=159 data=1.4M
+    [TIMING] BPF init CPU: 0.483s  wall: 0.483s
+    [RUSAGE] init maxrss=164576KB minflt=13955 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.578s stime=0.290s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=164576KB minflt=13955 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.578s stime=0.290s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.132s  wall: 1.960s
+    [RUSAGE] poll maxrss=164576KB minflt=13958 majflt=0 inblock=0 oublock=8 nvcsw=1665 nivcsw=9 utime=0.635s stime=0.365s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.616s  wall: 2.444s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=164576KB minflt=13959 majflt=0 inblock=0 oublock=8 nvcsw=1665 nivcsw=9 utime=0.635s stime=0.365s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N100_20261013T120732Z-B-N100.svg folded_lines=118
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=100 summary=101 (expect 101) perf_samples=568 data=4.7M
+    [TIMING] BPF init CPU: 0.020s  wall: 0.058s
+    [RUSAGE] init maxrss=22244KB minflt=3437 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=2 utime=0.289s stime=0.057s | children utime=0.026s stime=0.013s maxrss=79676KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22244KB minflt=3437 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=2 utime=0.289s stime=0.057s | children utime=0.026s stime=0.013s maxrss=79676KB
+    [TIMING] Poll loop CPU: 4.315s  wall: 62.024s
+    [RUSAGE] poll maxrss=22244KB minflt=3441 majflt=0 inblock=0 oublock=8 nvcsw=51146 nivcsw=32 utime=1.712s stime=2.950s | children utime=0.026s stime=0.013s maxrss=79676KB
+    [TIMING] Total CPU: 4.336s  wall: 62.083s
+    [SUMMARY] Events in map: 101
+    [RUSAGE] after-summary maxrss=22244KB minflt=3441 majflt=0 inblock=0 oublock=16 nvcsw=51146 nivcsw=32 utime=1.712s stime=2.951s | children utime=0.026s stime=0.013s maxrss=79676KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N100_20261013T120732Z-B-N100.svg folded_lines=237
+[ALL-DONE] TAG=20261013T120732Z-B-N100 VAR=B N=100 2026-10-13T12:31:59+00:00
+[PASS3 VAR=B N=1000] 2026-10-13T12:31:59+00:00
+[START] TAG=20261013T120732Z-B-N1000 host=nono1 VAR=B (ablB_print_const) N=1000 freq=199 cg=dwarf T=1s 2026-10-13T12:31:59+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=1000 summary=1001 (expect 1001) perf_samples=181 data=1.6M
+    [TIMING] BPF init CPU: 0.503s  wall: 0.504s
+    [RUSAGE] init maxrss=166172KB minflt=14875 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.556s stime=0.286s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=166172KB minflt=14875 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.556s stime=0.286s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.248s  wall: 3.047s
+    [RUSAGE] poll maxrss=166172KB minflt=14878 majflt=0 inblock=0 oublock=16 nvcsw=2553 nivcsw=15 utime=0.678s stime=0.412s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.752s  wall: 3.552s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=166172KB minflt=14879 majflt=0 inblock=0 oublock=16 nvcsw=2553 nivcsw=15 utime=0.678s stime=0.413s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N1000_20261013T120732Z-B-N1000.svg folded_lines=138
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=1000 summary=1001 (expect 1001) perf_samples=611 data=5.0M
+    [TIMING] BPF init CPU: 0.025s  wall: 0.063s
+    [RUSAGE] init maxrss=22132KB minflt=3431 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=1 utime=0.259s stime=0.090s | children utime=0.024s stime=0.015s maxrss=79720KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=22132KB minflt=3431 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=1 utime=0.259s stime=0.090s | children utime=0.024s stime=0.015s maxrss=79720KB
+    [TIMING] Poll loop CPU: 3.932s  wall: 62.732s
+    [RUSAGE] poll maxrss=22388KB minflt=3435 majflt=0 inblock=0 oublock=8 nvcsw=52661 nivcsw=26 utime=1.645s stime=2.636s | children utime=0.024s stime=0.015s maxrss=79720KB
+    [TIMING] Total CPU: 3.957s  wall: 62.796s
+    [SUMMARY] Events in map: 1001
+    [RUSAGE] after-summary maxrss=22388KB minflt=3435 majflt=0 inblock=0 oublock=24 nvcsw=52661 nivcsw=26 utime=1.645s stime=2.636s | children utime=0.024s stime=0.015s maxrss=79720KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N1000_20261013T120732Z-B-N1000.svg folded_lines=234
+[ALL-DONE] TAG=20261013T120732Z-B-N1000 VAR=B N=1000 2026-10-13T12:34:18+00:00
+[PASS3 VAR=B N=2000] 2026-10-13T12:34:18+00:00
+[START] TAG=20261013T120732Z-B-N2000 host=nono1 VAR=B (ablB_print_const) N=2000 freq=199 cg=dwarf T=1s 2026-10-13T12:34:18+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=2000 summary=2001 (expect 2001) perf_samples=179 data=1.6M
+    [TIMING] BPF init CPU: 0.464s  wall: 0.464s
+    [RUSAGE] init maxrss=165616KB minflt=14241 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.553s stime=0.230s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=165616KB minflt=14241 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=5 utime=0.553s stime=0.230s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 0.253s  wall: 3.575s
+    [RUSAGE] poll maxrss=165616KB minflt=14246 majflt=0 inblock=0 oublock=32 nvcsw=3652 nivcsw=12 utime=0.676s stime=0.360s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 0.717s  wall: 4.039s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=165616KB minflt=14247 majflt=0 inblock=0 oublock=32 nvcsw=3652 nivcsw=12 utime=0.676s stime=0.360s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N2000_20261013T120732Z-B-N2000.svg folded_lines=136
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=2000 summary=2001 (expect 2001) perf_samples=581 data=4.8M
+    [TIMING] BPF init CPU: 0.025s  wall: 0.068s
+    [RUSAGE] init maxrss=22148KB minflt=3435 majflt=0 inblock=0 oublock=0 nvcsw=6 nivcsw=3 utime=0.194s stime=0.048s | children utime=0.023s stime=0.021s maxrss=79700KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=22148KB minflt=3435 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=3 utime=0.194s stime=0.048s | children utime=0.023s stime=0.021s maxrss=79700KB
+    [TIMING] Poll loop CPU: 4.503s  wall: 63.788s
+    [RUSAGE] poll maxrss=22148KB minflt=3439 majflt=0 inblock=0 oublock=32 nvcsw=52949 nivcsw=38 utime=1.794s stime=2.951s | children utime=0.023s stime=0.021s maxrss=79700KB
+    [TIMING] Total CPU: 4.529s  wall: 63.857s
+    [SUMMARY] Events in map: 2001
+    [RUSAGE] after-summary maxrss=22148KB minflt=3439 majflt=0 inblock=0 oublock=40 nvcsw=52949 nivcsw=38 utime=1.794s stime=2.951s | children utime=0.023s stime=0.021s maxrss=79700KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N2000_20261013T120732Z-B-N2000.svg folded_lines=252
+[ALL-DONE] TAG=20261013T120732Z-B-N2000 VAR=B N=2000 2026-10-13T12:36:36+00:00
+[PASS3 VAR=count N=2000000] 2026-10-13T12:36:36+00:00
+[START] TAG=20261013T120732Z-count-N2000000 host=nono1 VAR=count (map1_count) N=2000000 freq=199 cg=dwarf T=1s 2026-10-13T12:36:36+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py  md5=369eca40b59b
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py  md5=6c6c11932fad
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=count impl=bcc N=2000000 summary=2000001 (expect 2000001) perf_samples=31703 data=256M
+    [TIMING] BPF init CPU: 0.400s  wall: 0.400s
+    [RUSAGE] init maxrss=165076KB minflt=14079 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=11 utime=0.499s stime=0.228s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=165076KB minflt=14079 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=11 utime=0.499s stime=0.228s | children utime=0.000s stime=0.000s maxrss=0KB
+    [LOST] 629 events lost
+    [TIMING] Poll loop CPU: 242.530s  wall: 1681.897s
+    [RUSAGE] poll maxrss=165076KB minflt=14097 majflt=0 inblock=0 oublock=185752 nvcsw=2044718 nivcsw=10837 utime=140.312s stime=102.945s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 242.931s  wall: 1682.298s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=165076KB minflt=14099 majflt=0 inblock=0 oublock=185752 nvcsw=2044718 nivcsw=10837 utime=140.312s stime=102.945s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_map1_count_bcc_N2000000_20261013T120732Z-count-N2000000.svg folded_lines=2268
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] VAR=count impl=pbpf N=2000000 summary=2000001 (expect 2000001) perf_samples=26082 data=211M
+    [TIMING] BPF init CPU: 0.027s  wall: 0.164s
+    [RUSAGE] init maxrss=22288KB minflt=3424 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=2 utime=0.324s stime=0.094s | children utime=0.029s stime=0.033s maxrss=64508KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22288KB minflt=3424 majflt=0 inblock=0 oublock=8 nvcsw=6 nivcsw=2 utime=0.324s stime=0.094s | children utime=0.029s stime=0.033s maxrss=64508KB
+    [LOST] 358 events on CPU 0
+    [TIMING] Poll loop CPU: 200.657s  wall: 1648.231s
+    [RUSAGE] poll maxrss=22544KB minflt=3431 majflt=0 inblock=0 oublock=189672 nvcsw=2056175 nivcsw=9189 utime=100.270s stime=100.805s | children utime=0.029s stime=0.033s maxrss=64508KB
+    [TIMING] Total CPU: 200.684s  wall: 1648.395s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=22544KB minflt=3431 majflt=0 inblock=0 oublock=189672 nvcsw=2056175 nivcsw=9189 utime=100.270s stime=100.805s | children utime=0.029s stime=0.033s maxrss=64508KB
+    [FLAME] perfrec_execve_map1_count_pbpf_N2000000_20261013T120732Z-count-N2000000.svg folded_lines=1787
+[ALL-DONE] TAG=20261013T120732Z-count-N2000000 VAR=count N=2000000 2026-10-13T13:34:16+00:00
+[PASS3 VAR=A N=2000000] 2026-10-13T13:34:16+00:00
+[START] TAG=20261013T120732Z-A-N2000000 host=nono1 VAR=A (ablA_empty) N=2000000 freq=199 cg=dwarf T=1s 2026-10-13T13:34:16+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py  md5=9b6b66a17391
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py  md5=35a089af9912
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=A impl=bcc N=2000000 summary=2000001 (expect 2000001) perf_samples=26152 data=211M
+    [TIMING] BPF init CPU: 0.471s  wall: 0.492s
+    [RUSAGE] init maxrss=138644KB minflt=14792 majflt=20 inblock=27440 oublock=8 nvcsw=24 nivcsw=16 utime=0.511s stime=0.258s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.001s  wall: 0.001s
+    [RUSAGE] setup maxrss=138644KB minflt=14792 majflt=20 inblock=27440 oublock=8 nvcsw=24 nivcsw=16 utime=0.511s stime=0.258s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Poll loop CPU: 212.017s  wall: 1676.480s
+    [RUSAGE] poll maxrss=138644KB minflt=14801 majflt=20 inblock=27440 oublock=16 nvcsw=2056075 nivcsw=8968 utime=101.931s stime=110.855s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 212.489s  wall: 1676.973s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=138644KB minflt=14801 majflt=20 inblock=27440 oublock=16 nvcsw=2056075 nivcsw=8968 utime=101.931s stime=110.855s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablA_empty_bcc_N2000000_20261013T120732Z-A-N2000000.svg folded_lines=1696
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=A impl=pbpf N=2000000 summary=2000001 (expect 2000001) perf_samples=21883 data=177M
+    [TIMING] BPF init CPU: 0.022s  wall: 0.166s
+    [RUSAGE] init maxrss=22184KB minflt=3430 majflt=4 inblock=64 oublock=0 nvcsw=10 nivcsw=3 utime=0.316s stime=0.085s | children utime=0.027s stime=0.036s maxrss=66356KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22184KB minflt=3430 majflt=4 inblock=64 oublock=8 nvcsw=10 nivcsw=3 utime=0.316s stime=0.085s | children utime=0.027s stime=0.036s maxrss=66356KB
+    [TIMING] Poll loop CPU: 196.829s  wall: 1663.529s
+    [RUSAGE] poll maxrss=22184KB minflt=3436 majflt=4 inblock=64 oublock=8 nvcsw=2098523 nivcsw=7363 utime=81.567s stime=115.663s | children utime=0.027s stime=0.036s maxrss=66356KB
+    [TIMING] Total CPU: 196.852s  wall: 1663.695s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=22184KB minflt=3436 majflt=4 inblock=64 oublock=16 nvcsw=2098523 nivcsw=7363 utime=81.567s stime=115.663s | children utime=0.027s stime=0.036s maxrss=66356KB
+    [FLAME] perfrec_execve_ablA_empty_pbpf_N2000000_20261013T120732Z-A-N2000000.svg folded_lines=1400
+[ALL-DONE] TAG=20261013T120732Z-A-N2000000 VAR=A N=2000000 2026-10-13T14:31:44+00:00
+[PASS3 VAR=B N=2000000] 2026-10-13T14:31:44+00:00
+[START] TAG=20261013T120732Z-B-N2000000 host=nono1 VAR=B (ablB_print_const) N=2000000 freq=199 cg=dwarf T=1s 2026-10-13T14:31:44+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py  md5=f8fb230ee7a0
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py  md5=8cd48288bd58
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] VAR=B impl=bcc N=2000000 summary=2000001 (expect 2000001) perf_samples=26011 data=210M
+    [TIMING] BPF init CPU: 0.375s  wall: 0.423s
+    [RUSAGE] init maxrss=132396KB minflt=13898 majflt=38 inblock=53856 oublock=8 nvcsw=42 nivcsw=16 utime=0.418s stime=0.253s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Setup CPU: 0.002s  wall: 0.002s
+    [RUSAGE] setup maxrss=132396KB minflt=13898 majflt=38 inblock=53856 oublock=8 nvcsw=42 nivcsw=16 utime=0.418s stime=0.253s | children utime=0.000s stime=0.000s maxrss=0KB
+    [LOST] 93 events lost
+    [TIMING] Poll loop CPU: 208.574s  wall: 1617.272s
+    [RUSAGE] poll maxrss=132396KB minflt=13910 majflt=38 inblock=53856 oublock=23856 nvcsw=2040464 nivcsw=9001 utime=106.318s stime=102.927s | children utime=0.000s stime=0.000s maxrss=0KB
+    [TIMING] Total CPU: 208.952s  wall: 1617.696s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=132396KB minflt=13911 majflt=38 inblock=53856 oublock=23856 nvcsw=2040464 nivcsw=9001 utime=106.318s stime=102.927s | children utime=0.000s stime=0.000s maxrss=0KB
+    [FLAME] perfrec_execve_ablB_print_const_bcc_N2000000_20261013T120732Z-B-N2000000.svg folded_lines=1754
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+    [WARN] program never reported polling within 60s
+[DONE] VAR=B impl=pbpf N=2000000 summary=2000001 (expect 2000001) perf_samples=24310 data=197M
+    [TIMING] BPF init CPU: 0.024s  wall: 0.084s
+    [RUSAGE] init maxrss=22152KB minflt=3435 majflt=0 inblock=16 oublock=0 nvcsw=7 nivcsw=4 utime=0.284s stime=0.097s | children utime=0.029s stime=0.024s maxrss=79904KB
+    [TIMING] Setup CPU: 0.000s  wall: 0.000s
+    [RUSAGE] setup maxrss=22152KB minflt=3435 majflt=0 inblock=16 oublock=8 nvcsw=7 nivcsw=4 utime=0.284s stime=0.097s | children utime=0.029s stime=0.024s maxrss=79904KB
+    [TIMING] Poll loop CPU: 178.199s  wall: 1685.768s
+    [RUSAGE] poll maxrss=22152KB minflt=3440 majflt=0 inblock=16 oublock=23920 nvcsw=2120624 nivcsw=8134 utime=81.315s stime=97.265s | children utime=0.029s stime=0.024s maxrss=79904KB
+    [TIMING] Total CPU: 178.223s  wall: 1685.852s
+    [SUMMARY] Events in map: 2000001
+    [RUSAGE] after-summary maxrss=22152KB minflt=3440 majflt=0 inblock=16 oublock=23920 nvcsw=2120624 nivcsw=8134 utime=81.315s stime=97.265s | children utime=0.029s stime=0.024s maxrss=79904KB
+    [FLAME] perfrec_execve_ablB_print_const_pbpf_N2000000_20261013T120732Z-B-N2000000.svg folded_lines=1590
+[ALL-DONE] TAG=20261013T120732Z-B-N2000000 VAR=B N=2000000 2026-10-13T15:28:42+00:00
+[PASS3 DONE] BASE_TAG=20261013T120732Z 2026-10-13T15:28:42+00:00

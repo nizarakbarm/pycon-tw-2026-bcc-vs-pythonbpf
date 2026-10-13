@@ -1,0 +1,218 @@
+[SWEEP START] BASE_TAG=20261013T063735Z host=nono1 NS='20 50 100 1000 2000 2000000' VARIANTS='count A B' 2026-10-13T06:37:35+00:00
+[SWEEP VARIANT=count N=20] 2026-10-13T06:37:35+00:00
+[START] TAG=20261013T063735Z-count-N20 host=nono1 VARIANT=count (map1_count) N=20 strace=-f -T (unfiltered) 2026-10-13T06:37:35+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=20  summary=21 (expect 21)  trace_lines=16488
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=20  summary=21 (expect 21)  trace_lines=7028
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N20 VARIANT=count N=20 2026-10-13T06:38:41+00:00
+[SWEEP VARIANT=count N=50] 2026-10-13T06:38:41+00:00
+[START] TAG=20261013T063735Z-count-N50 host=nono1 VARIANT=count (map1_count) N=50 strace=-f -T (unfiltered) 2026-10-13T06:38:41+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=50  summary=51 (expect 51)  trace_lines=16476
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=50  summary=25 (expect 51)  trace_lines=6669
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N50 VARIANT=count N=50 2026-10-13T06:39:46+00:00
+[SWEEP VARIANT=count N=100] 2026-10-13T06:39:46+00:00
+[START] TAG=20261013T063735Z-count-N100 host=nono1 VARIANT=count (map1_count) N=100 strace=-f -T (unfiltered) 2026-10-13T06:39:46+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=100  summary=101 (expect 101)  trace_lines=16443
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=100  summary=101 (expect 101)  trace_lines=7014
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N100 VARIANT=count N=100 2026-10-13T06:40:52+00:00
+[SWEEP VARIANT=count N=1000] 2026-10-13T06:40:52+00:00
+[START] TAG=20261013T063735Z-count-N1000 host=nono1 VARIANT=count (map1_count) N=1000 strace=-f -T (unfiltered) 2026-10-13T06:40:52+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=1000  summary=1001 (expect 1001)  trace_lines=18627
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=1000  summary=1001 (expect 1001)  trace_lines=8040
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N1000 VARIANT=count N=1000 2026-10-13T06:41:59+00:00
+[SWEEP VARIANT=count N=2000] 2026-10-13T06:41:59+00:00
+[START] TAG=20261013T063735Z-count-N2000 host=nono1 VARIANT=count (map1_count) N=2000 strace=-f -T (unfiltered) 2026-10-13T06:41:59+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=2000  summary=2001 (expect 2001)  trace_lines=20695
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=2000  summary=2001 (expect 2001)  trace_lines=8802
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N2000 VARIANT=count N=2000 2026-10-13T06:43:09+00:00
+[SWEEP VARIANT=count N=2000000] 2026-10-13T06:43:09+00:00
+[START] TAG=20261013T063735Z-count-N2000000 host=nono1 VARIANT=count (map1_count) N=2000000 strace=-f -T (unfiltered) 2026-10-13T06:43:09+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/map_1_perf_timed_count.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/map_1_perf_timed_count.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=map1_count impl=bcc N=2000000  summary=2000001 (expect 2000001)  trace_lines=3913289
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=map1_count impl=pbpf N=2000000  summary=2000001 (expect 2000001)  trace_lines=2055649
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-count-N2000000 VARIANT=count N=2000000 2026-10-13T07:43:31+00:00
+[SWEEP VARIANT=A N=20] 2026-10-13T07:43:31+00:00
+[START] TAG=20261013T063735Z-A-N20 host=nono1 VARIANT=A (ablA_empty) N=20 strace=-f -T (unfiltered) 2026-10-13T07:43:31+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=20  summary=21 (expect 21)  trace_lines=16406
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=20  summary=21 (expect 21)  trace_lines=7003
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N20 VARIANT=A N=20 2026-10-13T07:44:36+00:00
+[SWEEP VARIANT=A N=50] 2026-10-13T07:44:36+00:00
+[START] TAG=20261013T063735Z-A-N50 host=nono1 VARIANT=A (ablA_empty) N=50 strace=-f -T (unfiltered) 2026-10-13T07:44:36+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=50  summary=51 (expect 51)  trace_lines=16710
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=50  summary=51 (expect 51)  trace_lines=7035
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N50 VARIANT=A N=50 2026-10-13T07:45:42+00:00
+[SWEEP VARIANT=A N=100] 2026-10-13T07:45:42+00:00
+[START] TAG=20261013T063735Z-A-N100 host=nono1 VARIANT=A (ablA_empty) N=100 strace=-f -T (unfiltered) 2026-10-13T07:45:42+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=100  summary=101 (expect 101)  trace_lines=17043
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=100  summary=101 (expect 101)  trace_lines=7015
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N100 VARIANT=A N=100 2026-10-13T07:46:47+00:00
+[SWEEP VARIANT=A N=1000] 2026-10-13T07:46:47+00:00
+[START] TAG=20261013T063735Z-A-N1000 host=nono1 VARIANT=A (ablA_empty) N=1000 strace=-f -T (unfiltered) 2026-10-13T07:46:47+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=1000  summary=1001 (expect 1001)  trace_lines=18391
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=1000  summary=1001 (expect 1001)  trace_lines=7876
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N1000 VARIANT=A N=1000 2026-10-13T07:47:54+00:00
+[SWEEP VARIANT=A N=2000] 2026-10-13T07:47:54+00:00
+[START] TAG=20261013T063735Z-A-N2000 host=nono1 VARIANT=A (ablA_empty) N=2000 strace=-f -T (unfiltered) 2026-10-13T07:47:54+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=2000  summary=2001 (expect 2001)  trace_lines=20534
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=2000  summary=2001 (expect 2001)  trace_lines=9037
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N2000 VARIANT=A N=2000 2026-10-13T07:49:03+00:00
+[SWEEP VARIANT=A N=2000000] 2026-10-13T07:49:03+00:00
+[START] TAG=20261013T063735Z-A-N2000000 host=nono1 VARIANT=A (ablA_empty) N=2000000 strace=-f -T (unfiltered) 2026-10-13T07:49:03+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_A_empty_callback.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_A_empty_callback.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablA_empty impl=bcc N=2000000  summary=2000001 (expect 2000001)  trace_lines=3899375
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablA_empty impl=pbpf N=2000000  summary=2000001 (expect 2000001)  trace_lines=2050695
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-A-N2000000 VARIANT=A N=2000000 2026-10-13T08:48:22+00:00
+[SWEEP VARIANT=B N=20] 2026-10-13T08:48:22+00:00
+[START] TAG=20261013T063735Z-B-N20 host=nono1 VARIANT=B (ablB_print_const) N=20 strace=-f -T (unfiltered) 2026-10-13T08:48:22+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=20  summary=21 (expect 21)  trace_lines=16480
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=20  summary=21 (expect 21)  trace_lines=6975
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N20 VARIANT=B N=20 2026-10-13T08:49:27+00:00
+[SWEEP VARIANT=B N=50] 2026-10-13T08:49:27+00:00
+[START] TAG=20261013T063735Z-B-N50 host=nono1 VARIANT=B (ablB_print_const) N=50 strace=-f -T (unfiltered) 2026-10-13T08:49:27+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=50  summary=51 (expect 51)  trace_lines=16686
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=50  summary=51 (expect 51)  trace_lines=7043
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N50 VARIANT=B N=50 2026-10-13T08:50:33+00:00
+[SWEEP VARIANT=B N=100] 2026-10-13T08:50:33+00:00
+[START] TAG=20261013T063735Z-B-N100 host=nono1 VARIANT=B (ablB_print_const) N=100 strace=-f -T (unfiltered) 2026-10-13T08:50:33+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=100  summary=101 (expect 101)  trace_lines=16739
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=100  summary=101 (expect 101)  trace_lines=7021
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N100 VARIANT=B N=100 2026-10-13T08:51:38+00:00
+[SWEEP VARIANT=B N=1000] 2026-10-13T08:51:38+00:00
+[START] TAG=20261013T063735Z-B-N1000 host=nono1 VARIANT=B (ablB_print_const) N=1000 strace=-f -T (unfiltered) 2026-10-13T08:51:38+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=1000  summary=1001 (expect 1001)  trace_lines=18433
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=1000  summary=1001 (expect 1001)  trace_lines=8027
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N1000 VARIANT=B N=1000 2026-10-13T08:52:45+00:00
+[SWEEP VARIANT=B N=2000] 2026-10-13T08:52:45+00:00
+[START] TAG=20261013T063735Z-B-N2000 host=nono1 VARIANT=B (ablB_print_const) N=2000 strace=-f -T (unfiltered) 2026-10-13T08:52:45+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=2000  summary=2001 (expect 2001)  trace_lines=20718
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=2000  summary=2001 (expect 2001)  trace_lines=9113
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N2000 VARIANT=B N=2000 2026-10-13T08:53:54+00:00
+[SWEEP VARIANT=B N=2000000] 2026-10-13T08:53:54+00:00
+[START] TAG=20261013T063735Z-B-N2000000 host=nono1 VARIANT=B (ablB_print_const) N=2000000 strace=-f -T (unfiltered) 2026-10-13T08:53:54+00:00
+  BCC : /root/experiment/with_map/bcc/sys_enter_execve/abl_B_print_const.py
+  PBPF: /root/experiment/with_map/pythonbpf/sys_enter_execve/abl_B_print_const.py
+--- arm 1: BCC (pre-sleep 2s) ---
+[DONE] variant=ablB_print_const impl=bcc N=2000000  summary=2000001 (expect 2000001)  trace_lines=3932045
+    TOP syscalls by summed time (sec, calls, name):
+[GAP] idle 60s
+--- arm 2: PBPF (pre-sleep 1s) ---
+[DONE] variant=ablB_print_const impl=pbpf N=2000000  summary=2000001 (expect 2000001)  trace_lines=2041136
+    TOP syscalls by summed time (sec, calls, name):
+[ALL-DONE] TAG=20261013T063735Z-B-N2000000 VARIANT=B N=2000000 2026-10-13T09:51:31+00:00
+[SWEEP DONE] BASE_TAG=20261013T063735Z 2026-10-13T09:51:31+00:00

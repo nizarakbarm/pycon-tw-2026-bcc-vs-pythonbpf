@@ -1,0 +1,34 @@
+[THREAD] Main poll: ident=140222508148160 native=2248267
+[TIMING] BPF init CPU: 0.490s  wall: 0.490s
+[RUSAGE] init maxrss=164856KB minflt=18931 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.584s stime=0.298s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=164856KB minflt=18931 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=3 utime=0.584s stime=0.298s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+CPU [0] UID 1000 comm: sudo, count: 0
+CPU [1] UID 1000 comm: gen_exec, count: 1
+CPU [1] UID 1000 comm: gen_exec, count: 2
+CPU [1] UID 1000 comm: gen_exec, count: 3
+CPU [1] UID 1000 comm: gen_exec, count: 4
+CPU [1] UID 1000 comm: gen_exec, count: 5
+CPU [1] UID 1000 comm: gen_exec, count: 6
+CPU [1] UID 1000 comm: gen_exec, count: 7
+CPU [1] UID 1000 comm: gen_exec, count: 8
+CPU [1] UID 1000 comm: gen_exec, count: 9
+CPU [1] UID 1000 comm: gen_exec, count: 10
+CPU [1] UID 1000 comm: gen_exec, count: 11
+CPU [1] UID 1000 comm: gen_exec, count: 12
+CPU [2] UID 1000 comm: gen_exec, count: 13
+CPU [2] UID 1000 comm: gen_exec, count: 14
+CPU [1] UID 1000 comm: gen_exec, count: 15
+CPU [1] UID 1000 comm: gen_exec, count: 16
+CPU [1] UID 1000 comm: gen_exec, count: 17
+CPU [1] UID 1000 comm: gen_exec, count: 18
+CPU [2] UID 1000 comm: gen_exec, count: 19
+CPU [2] UID 1000 comm: gen_exec, count: 20
+[TIMING] Poll loop CPU: 0.112s  wall: 1.761s
+[RUSAGE] poll maxrss=164856KB minflt=18935 majflt=0 inblock=0 oublock=8 nvcsw=1459 nivcsw=4 utime=0.639s stime=0.355s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 0.604s  wall: 2.252s
+[SUMMARY] Events in map: 21
+[RUSAGE] after-summary maxrss=164856KB minflt=18936 majflt=0 inblock=0 oublock=8 nvcsw=1459 nivcsw=4 utime=0.639s stime=0.355s | children utime=0.000s stime=0.000s maxrss=0KB
+[ perf record: Woken up 5 times to write data ]
+[ perf record: Captured and wrote 1.301 MB /root/experiment/results/perfrecord/perfrec_execve_map1_count_bcc_N20_20261013T120732Z-count-N20.data (154 samples) ]

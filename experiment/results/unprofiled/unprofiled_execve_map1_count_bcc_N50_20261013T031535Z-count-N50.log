@@ -1,0 +1,62 @@
+[THREAD] Main poll: ident=139621334537664 native=3356977
+[TIMING] BPF init CPU: 0.461s  wall: 0.461s
+[RUSAGE] init maxrss=176696KB minflt=15068 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=2 utime=0.373s stime=0.163s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.002s  wall: 0.002s
+[RUSAGE] setup maxrss=176696KB minflt=15068 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=2 utime=0.373s stime=0.163s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+CPU [0] UID 1000 comm: sudo, count: 0
+CPU [1] UID 1000 comm: gen_exec, count: 1
+CPU [1] UID 1000 comm: gen_exec, count: 2
+CPU [1] UID 1000 comm: gen_exec, count: 3
+CPU [1] UID 1000 comm: gen_exec, count: 4
+CPU [1] UID 1000 comm: gen_exec, count: 5
+CPU [1] UID 1000 comm: gen_exec, count: 6
+CPU [1] UID 1000 comm: gen_exec, count: 7
+CPU [1] UID 1000 comm: gen_exec, count: 8
+CPU [1] UID 1000 comm: gen_exec, count: 9
+CPU [1] UID 1000 comm: gen_exec, count: 10
+CPU [1] UID 1000 comm: gen_exec, count: 11
+CPU [1] UID 1000 comm: gen_exec, count: 12
+CPU [1] UID 1000 comm: gen_exec, count: 13
+CPU [1] UID 1000 comm: gen_exec, count: 14
+CPU [1] UID 1000 comm: gen_exec, count: 15
+CPU [1] UID 1000 comm: gen_exec, count: 16
+CPU [1] UID 1000 comm: gen_exec, count: 17
+CPU [0] UID 1000 comm: gen_exec, count: 18
+CPU [1] UID 1000 comm: gen_exec, count: 19
+CPU [0] UID 1000 comm: gen_exec, count: 20
+CPU [1] UID 1000 comm: gen_exec, count: 21
+CPU [0] UID 1000 comm: gen_exec, count: 22
+CPU [0] UID 1000 comm: gen_exec, count: 23
+CPU [0] UID 1000 comm: gen_exec, count: 24
+CPU [2] UID 1000 comm: gen_exec, count: 25
+CPU [1] UID 1000 comm: gen_exec, count: 26
+CPU [0] UID 1000 comm: gen_exec, count: 27
+CPU [0] UID 1000 comm: gen_exec, count: 28
+CPU [0] UID 1000 comm: gen_exec, count: 29
+CPU [0] UID 1000 comm: gen_exec, count: 30
+CPU [1] UID 1000 comm: gen_exec, count: 31
+CPU [0] UID 1000 comm: gen_exec, count: 32
+CPU [1] UID 1000 comm: gen_exec, count: 33
+CPU [0] UID 1000 comm: gen_exec, count: 34
+CPU [1] UID 1000 comm: gen_exec, count: 35
+CPU [0] UID 1000 comm: gen_exec, count: 36
+CPU [0] UID 1000 comm: gen_exec, count: 37
+CPU [0] UID 1000 comm: gen_exec, count: 38
+CPU [0] UID 1000 comm: gen_exec, count: 39
+CPU [1] UID 1000 comm: gen_exec, count: 40
+CPU [0] UID 1000 comm: gen_exec, count: 41
+CPU [1] UID 1000 comm: gen_exec, count: 42
+CPU [1] UID 1000 comm: gen_exec, count: 43
+CPU [0] UID 1000 comm: gen_exec, count: 44
+CPU [1] UID 1000 comm: gen_exec, count: 45
+CPU [1] UID 1000 comm: gen_exec, count: 46
+CPU [0] UID 1000 comm: gen_exec, count: 47
+CPU [1] UID 1000 comm: gen_exec, count: 48
+CPU [0] UID 1000 comm: gen_exec, count: 49
+CPU [0] UID 1000 comm: gen_exec, count: 50
+[TIMING] Poll loop CPU: 0.093s  wall: 2.028s
+[RUSAGE] poll maxrss=176696KB minflt=15073 majflt=0 inblock=0 oublock=8 nvcsw=1701 nivcsw=3 utime=0.444s stime=0.185s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 0.556s  wall: 2.491s
+[SUMMARY] Events in map: 51
+[RUSAGE] after-summary maxrss=176696KB minflt=15074 majflt=0 inblock=0 oublock=8 nvcsw=1701 nivcsw=4 utime=0.444s stime=0.185s | children utime=0.000s stime=0.000s maxrss=0KB

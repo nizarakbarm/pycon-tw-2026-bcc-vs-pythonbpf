@@ -1,0 +1,4 @@
+armed=1
+trigger_wall=.812653834
+drain_waited=6s quiet=6s bytes=32207
+events=1001 out_lines=1008

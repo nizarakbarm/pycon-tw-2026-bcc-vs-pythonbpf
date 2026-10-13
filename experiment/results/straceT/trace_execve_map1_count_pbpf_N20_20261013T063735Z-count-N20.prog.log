@@ -1,0 +1,32 @@
+[THREAD] Main poll: ident=140268515468736 native=2798588
+[TIMING] BPF init CPU: 0.042s  wall: 0.203s
+[RUSAGE] init maxrss=22300KB minflt=3420 majflt=0 inblock=0 oublock=8 nvcsw=9361 nivcsw=22 utime=0.153s stime=0.095s | children utime=0.028s stime=0.040s maxrss=85268KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=22300KB minflt=3420 majflt=0 inblock=0 oublock=8 nvcsw=9369 nivcsw=22 utime=0.154s stime=0.095s | children utime=0.028s stime=0.040s maxrss=85268KB
+Starting to poll... (Ctrl+C to stop)
+CPU [0] UID 1000, comm: sudo, count: 0
+CPU [2] UID 1000, comm: gen_exec, count: 1
+CPU [2] UID 1000, comm: gen_exec, count: 2
+CPU [2] UID 1000, comm: gen_exec, count: 3
+CPU [1] UID 1000, comm: gen_exec, count: 4
+CPU [2] UID 1000, comm: gen_exec, count: 5
+CPU [2] UID 1000, comm: gen_exec, count: 6
+CPU [2] UID 1000, comm: gen_exec, count: 7
+CPU [1] UID 1000, comm: gen_exec, count: 8
+CPU [1] UID 1000, comm: gen_exec, count: 9
+CPU [1] UID 1000, comm: gen_exec, count: 10
+CPU [1] UID 1000, comm: gen_exec, count: 11
+CPU [1] UID 1000, comm: gen_exec, count: 12
+CPU [1] UID 1000, comm: gen_exec, count: 13
+CPU [2] UID 1000, comm: gen_exec, count: 14
+CPU [2] UID 1000, comm: gen_exec, count: 15
+CPU [2] UID 1000, comm: gen_exec, count: 16
+CPU [1] UID 1000, comm: gen_exec, count: 17
+CPU [2] UID 1000, comm: gen_exec, count: 18
+CPU [2] UID 1000, comm: gen_exec, count: 19
+CPU [0] UID 1000, comm: gen_exec, count: 20
+[TIMING] Poll loop CPU: 0.042s  wall: 0.925s
+[RUSAGE] poll maxrss=22300KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=11540 nivcsw=22 utime=0.178s stime=0.112s | children utime=0.028s stime=0.040s maxrss=85268KB
+[TIMING] Total CPU: 0.084s  wall: 1.129s
+[SUMMARY] Events in map: 21
+[RUSAGE] after-summary maxrss=22300KB minflt=3423 majflt=0 inblock=0 oublock=8 nvcsw=11556 nivcsw=22 utime=0.179s stime=0.112s | children utime=0.028s stime=0.040s maxrss=85268KB

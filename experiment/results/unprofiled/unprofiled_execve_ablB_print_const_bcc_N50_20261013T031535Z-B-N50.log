@@ -1,0 +1,62 @@
+[THREAD] Main poll: ident=139828652881344 native=3370608
+[TIMING] BPF init CPU: 0.442s  wall: 0.442s
+[RUSAGE] init maxrss=176632KB minflt=14021 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=25 utime=0.321s stime=0.182s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=176632KB minflt=14021 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=25 utime=0.321s stime=0.182s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+[TIMING] Poll loop CPU: 0.094s  wall: 2.063s
+[RUSAGE] poll maxrss=176632KB minflt=14024 majflt=0 inblock=0 oublock=16 nvcsw=1780 nivcsw=25 utime=0.391s stime=0.207s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 0.537s  wall: 2.506s
+[SUMMARY] Events in map: 51
+[RUSAGE] after-summary maxrss=176632KB minflt=14025 majflt=0 inblock=0 oublock=16 nvcsw=1780 nivcsw=25 utime=0.392s stime=0.207s | children utime=0.000s stime=0.000s maxrss=0KB

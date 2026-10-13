@@ -1,0 +1,27 @@
+[THREAD] Main poll: ident=140247424067008 native=3829812
+[TIMING] BPF init CPU: 0.570s  wall: 0.571s
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+Starting to poll... (Ctrl+C to stop)
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+CPU [1] UID 1002 comm: gen_unlink
+[TIMING] Poll loop CPU: 0.102s  wall: 2.467s
+[TIMING] Total CPU: 0.674s  wall: 3.039s
+[SUMMARY] Events in using perf only

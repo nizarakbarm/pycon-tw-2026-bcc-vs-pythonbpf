@@ -1,0 +1,114 @@
+[THREAD] Main poll: ident=139876640089536 native=2266155
+[TIMING] BPF init CPU: 0.483s  wall: 0.483s
+[RUSAGE] init maxrss=164576KB minflt=13955 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.578s stime=0.290s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=164576KB minflt=13955 majflt=0 inblock=0 oublock=8 nvcsw=1 nivcsw=4 utime=0.578s stime=0.290s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+event
+[TIMING] Poll loop CPU: 0.132s  wall: 1.960s
+[RUSAGE] poll maxrss=164576KB minflt=13958 majflt=0 inblock=0 oublock=8 nvcsw=1665 nivcsw=9 utime=0.635s stime=0.365s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 0.616s  wall: 2.444s
+[SUMMARY] Events in map: 101
+[RUSAGE] after-summary maxrss=164576KB minflt=13959 majflt=0 inblock=0 oublock=8 nvcsw=1665 nivcsw=9 utime=0.635s stime=0.365s | children utime=0.000s stime=0.000s maxrss=0KB
+[ perf record: Woken up 5 times to write data ]
+[ perf record: Captured and wrote 1.341 MB /root/experiment/results/perfrecord/perfrec_execve_ablB_print_const_bcc_N100_20261013T120732Z-B-N100.data (159 samples) ]

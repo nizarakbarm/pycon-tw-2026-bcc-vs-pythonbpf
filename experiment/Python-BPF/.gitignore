@@ -1,0 +1,16 @@
+*venv*/
+.ropeproject/
+.idea/
+*.egg-info/
+.vscode/
+__pycache__/
+*.ll
+*.o
+.ipynb_checkpoints/
+vmlinux.py
+~*
+vmlinux.h
+
+# Documentation build artifacts
+docs/_build/
+docs/_templates/

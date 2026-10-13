@@ -1,0 +1,10 @@
+# extracted summary lines only (full per-event log at N=2M is 93 MB and excluded)
+[TIMING] BPF init CPU: 0.580s  wall: 0.580s
+[RUSAGE] init maxrss=175236KB minflt=13665 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=10 utime=0.454s stime=0.200s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.001s  wall: 0.001s
+[RUSAGE] setup maxrss=175236KB minflt=13665 majflt=0 inblock=0 oublock=8 nvcsw=0 nivcsw=10 utime=0.454s stime=0.200s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Poll loop CPU: 133.987s  wall: 1763.010s
+[RUSAGE] poll maxrss=175236KB minflt=13681 majflt=0 inblock=0 oublock=185848 nvcsw=2113388 nivcsw=8600 utime=109.058s stime=25.584s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 134.568s  wall: 1763.592s
+[SUMMARY] Events in map: 2000001
+[RUSAGE] after-summary maxrss=175236KB minflt=13683 majflt=0 inblock=0 oublock=185848 nvcsw=2113388 nivcsw=8600 utime=109.058s stime=25.584s | children utime=0.000s stime=0.000s maxrss=0KB

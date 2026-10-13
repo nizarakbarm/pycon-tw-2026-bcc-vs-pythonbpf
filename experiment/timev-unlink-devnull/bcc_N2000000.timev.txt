@@ -1,0 +1,86 @@
+Possibly lost 334 samples
+Possibly lost 4456 samples
+Possibly lost 78 samples
+Possibly lost 599 samples
+Possibly lost 89 samples
+Possibly lost 4 samples
+Possibly lost 1136 samples
+Possibly lost 4830 samples
+Possibly lost 119 samples
+Possibly lost 14 samples
+Possibly lost 486 samples
+Possibly lost 303 samples
+Possibly lost 650 samples
+Possibly lost 705 samples
+Possibly lost 7 samples
+Possibly lost 685 samples
+Possibly lost 201 samples
+Possibly lost 499 samples
+Possibly lost 657 samples
+Possibly lost 1692 samples
+Possibly lost 1477 samples
+Possibly lost 181 samples
+Possibly lost 541 samples
+Possibly lost 934 samples
+Possibly lost 4 samples
+Possibly lost 1056 samples
+Possibly lost 554 samples
+Possibly lost 5 samples
+Possibly lost 358 samples
+Possibly lost 16 samples
+Possibly lost 29 samples
+Possibly lost 144 samples
+Possibly lost 4900 samples
+Possibly lost 11 samples
+Possibly lost 31 samples
+Possibly lost 25 samples
+Possibly lost 123 samples
+Possibly lost 5 samples
+Possibly lost 4 samples
+Possibly lost 1107 samples
+Possibly lost 1379 samples
+Possibly lost 1356 samples
+Possibly lost 1329 samples
+Possibly lost 1344 samples
+Possibly lost 1729 samples
+Possibly lost 367 samples
+Possibly lost 1206 samples
+Possibly lost 53 samples
+Possibly lost 16 samples
+Possibly lost 17 samples
+Possibly lost 10 samples
+Possibly lost 7 samples
+Possibly lost 36 samples
+Possibly lost 26 samples
+Possibly lost 32 samples
+Possibly lost 56 samples
+Possibly lost 1108 samples
+Possibly lost 935 samples
+Possibly lost 6676 samples
+Possibly lost 12 samples
+Possibly lost 1311 samples
+Possibly lost 7 samples
+Possibly lost 1481 samples
+	Command being timed: "/root/experiment/.venv/bin/python perf_timed_unlink.py"
+	User time (seconds): 12.22
+	System time (seconds): 1.54
+	Percent of CPU this job got: 70%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:19.65
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 190896
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 13431
+	Voluntary context switches: 44886
+	Involuntary context switches: 56
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

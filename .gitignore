@@ -1,0 +1,11 @@
+# macOS / editors
+.DS_Store
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+
+# raw dumps excluded from this repository (see README)
+*.data
+*.T.txt

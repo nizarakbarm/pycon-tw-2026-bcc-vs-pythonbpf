@@ -1,0 +1,62 @@
+import ctypes
+
+
+def ktime():
+    """get current ktime"""
+    return ctypes.c_int64(0)
+
+
+def pid():
+    """get current process id"""
+    return ctypes.c_int32(0)
+
+
+def deref(ptr):
+    """dereference a pointer"""
+    result = ctypes.cast(ptr, ctypes.POINTER(ctypes.c_void_p)).contents.value
+    return result if result is not None else 0
+
+
+def comm(buf):
+    """get current process command name"""
+    return ctypes.c_int64(0)
+
+
+def probe_read_str(dst, src):
+    """Safely read a null-terminated string from kernel memory"""
+    return ctypes.c_int64(0)
+
+
+def random():
+    """get a pseudorandom u32 number"""
+    return ctypes.c_int32(0)
+
+
+def probe_read(dst, size, src):
+    """Safely read data from kernel memory"""
+    return ctypes.c_int64(0)
+
+
+def smp_processor_id():
+    """get the current CPU id"""
+    return ctypes.c_int32(0)
+
+
+def uid():
+    """get current user id"""
+    return ctypes.c_int32(0)
+
+
+def skb_store_bytes(offset, from_buf, size, flags=0):
+    """store bytes into a socket buffer"""
+    return ctypes.c_int64(0)
+
+
+def get_stack(buf, flags=0):
+    """get the current stack trace"""
+    return ctypes.c_int64(0)
+
+
+def get_current_cgroup_id():
+    """Get the current cgroup ID"""
+    return ctypes.c_int64(0)

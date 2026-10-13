@@ -1,0 +1,444 @@
+import logging
+from functools import lru_cache
+import importlib
+
+from .dependency_handler import DependencyHandler
+from .dependency_node import DependencyNode
+import ctypes
+from typing import Optional, Any, Dict
+
+logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def get_module_symbols(module_name: str):
+    imported_module = importlib.import_module(module_name)
+    return [name for name in dir(imported_module)], imported_module
+
+
+def unwrap_pointer_type(type_obj: Any) -> Any:
+    """
+    Recursively unwrap all pointer layers to get the base type.
+
+    This handles multiply nested pointers like LP_LP_struct_attribute_group
+    and returns the base type (struct_attribute_group).
+
+    Stops unwrapping when reaching a non-pointer type (one without _type_ attribute).
+
+    Args:
+        type_obj: The type object to unwrap
+
+    Returns:
+        The base type after unwrapping all pointer layers
+    """
+    current_type = type_obj
+    # Keep unwrapping while it's a pointer/array type (has _type_)
+    # But stop if _type_ is just a string or basic type marker
+    while hasattr(current_type, "_type_"):
+        next_type = current_type._type_
+        # Stop if _type_ is a string (like 'c' for c_char)
+        if isinstance(next_type, str):
+            break
+        current_type = next_type
+    return current_type
+
+
+def _is_flattenable_scalar(member_type: Any) -> bool:
+    """
+    Report whether an anonymous member's member can be lifted into the parent.
+
+    Only plain ctypes scalars qualify. Pointers, arrays, function pointers and
+    nested vmlinux structs are deliberately excluded: they need the containing
+    type / array length bookkeeping that the top-level field walk does, and
+    half-registering them would produce silently wrong relocations.
+    """
+    if getattr(member_type, "__module__", None) != ctypes.__name__:
+        return False
+    if not isinstance(member_type, type):
+        return False
+    if issubclass(member_type, (ctypes._Pointer, ctypes.Array)):
+        return False
+    is_function_pointer = hasattr(member_type, "_restype_") and hasattr(
+        member_type, "_argtypes_"
+    )
+    return not is_function_pointer
+
+
+def flatten_anonymous_members(class_obj, dep_node) -> None:
+    """
+    Register the members of a struct's anonymous members as fields of the struct.
+
+    C lets an anonymous struct/union member's members be named directly on the
+    parent (`regs->cs` where `cs` lives inside an anonymous union), and ctypes
+    mirrors that by exposing them on the parent class. The top-level `_fields_`
+    walk only sees the anonymous member itself (`_0`), so those names would
+    otherwise be unknown to the compiler.
+
+    Each flattened member keeps the anonymous member registered as before, is
+    given the ABSOLUTE offset ctypes reports for it on the parent, and records
+    its CO-RE access path as (index of the anonymous member in the parent,
+    index of the member within the anonymous member).
+
+    Members that overlap are expected and correct: in `struct pt_regs`, `cs`
+    and `csx` are both at offset 136. Each keeps its own field.
+
+    This is a no-op for any struct without `_anonymous_`.
+    """
+    anonymous_names = getattr(class_obj, "_anonymous_", None)
+    if not anonymous_names:
+        return
+    declared_fields = getattr(class_obj, "_fields_", None)
+    if not declared_fields:
+        return
+
+    anonymous_names = set(anonymous_names)
+    for parent_index, declared_field in enumerate(declared_fields):
+        parent_name = declared_field[0]
+        if parent_name not in anonymous_names:
+            continue
+        parent_type = declared_field[1]
+        member_fields = getattr(parent_type, "_fields_", None)
+        if not member_fields:
+            logger.warning(
+                f"Anonymous member {dep_node.name}.{parent_name} has no _fields_, "
+                "its members will not be accessible"
+            )
+            continue
+
+        for member_index, member in enumerate(member_fields):
+            member_name = member[0]
+            member_type = member[1]
+            member_bitfield_size = member[2] if len(member) == 3 else None
+
+            if member_name in dep_node.fields:
+                # Never let a flattened member shadow a field we already have.
+                logger.warning(
+                    f"Anonymous member {dep_node.name}.{parent_name}.{member_name} "
+                    f"collides with an existing field of {dep_node.name}, keeping "
+                    "the existing field"
+                )
+                continue
+            if member_bitfield_size is not None:
+                logger.warning(
+                    f"Skipping bitfield {dep_node.name}.{parent_name}.{member_name}: "
+                    "bitfields inside anonymous members are not supported yet"
+                )
+                continue
+            if not _is_flattenable_scalar(member_type):
+                logger.warning(
+                    f"Skipping {dep_node.name}.{parent_name}.{member_name} of type "
+                    f"{member_type}: only scalar ctypes members of anonymous members "
+                    "are supported"
+                )
+                continue
+            if not hasattr(class_obj, member_name):
+                # ctypes did not lift the name onto the parent, so we have no
+                # authoritative absolute offset for it.
+                logger.warning(
+                    f"Skipping {dep_node.name}.{parent_name}.{member_name}: ctypes "
+                    "does not expose it on the parent struct"
+                )
+                continue
+
+            dep_node.add_field(
+                member_name,
+                member_type,
+                ready=False,
+                access_path=(parent_index, member_index),
+            )
+            dep_node.set_field_bitfield_size(member_name, None)
+            # set_field_ready reads the offset straight off the ctypes struct,
+            # which reports the ABSOLUTE offset for a lifted anonymous member.
+            dep_node.set_field_ready(member_name, is_ready=True)
+            logger.debug(
+                f"Flattened {dep_node.name}.{parent_name}.{member_name} at offset "
+                f"{dep_node.fields[member_name].offset} with access path "
+                f"{(parent_index, member_index)}"
+            )
+
+
+def process_vmlinux_class(
+    node,
+    llvm_module,
+    handler: DependencyHandler,
+):
+    symbols_in_module, imported_module = get_module_symbols("vmlinux")
+    if node.name in symbols_in_module:
+        vmlinux_type = getattr(imported_module, node.name)
+        process_vmlinux_post_ast(vmlinux_type, llvm_module, handler)
+    else:
+        raise ImportError(f"{node.name} not in vmlinux")
+
+
+def process_vmlinux_post_ast(
+    elem_type_class,
+    llvm_handler,
+    handler: DependencyHandler,
+    processing_stack=None,
+):
+    # Initialize processing stack on first call
+    if processing_stack is None:
+        processing_stack = set()
+    symbols_in_module, imported_module = get_module_symbols("vmlinux")
+
+    current_symbol_name = elem_type_class.__name__
+    logger.info(f"Begin {current_symbol_name} Processing")
+    field_table: Dict[str, list] = {}
+    is_complex_type = False
+    containing_type: Optional[Any] = None
+    ctype_complex_type: Optional[Any] = None
+    type_length: Optional[int] = None
+    module_name = getattr(elem_type_class, "__module__", None)
+
+    # Check if already processed
+    if handler.has_node(current_symbol_name):
+        logger.debug(f"Node {current_symbol_name} already processed and ready")
+        return True
+
+    # XXX:Check its use. It's probably not being used.
+    if current_symbol_name in processing_stack:
+        logger.debug(
+            f"Dependency already in processing stack for {current_symbol_name}, skipping"
+        )
+        return True
+
+    processing_stack.add(current_symbol_name)
+
+    if module_name == "vmlinux":
+        if hasattr(elem_type_class, "_type_"):
+            pass
+        else:
+            new_dep_node = DependencyNode(name=current_symbol_name)
+
+            # elem_type_class is the actual vmlinux struct/class
+            new_dep_node.set_ctype_struct(elem_type_class)
+
+            handler.add_node(new_dep_node)
+            class_obj = getattr(imported_module, current_symbol_name)
+            # Inspect the class fields
+            if hasattr(class_obj, "_fields_"):
+                for field_elem in class_obj._fields_:
+                    field_name: str = ""
+                    field_type: Optional[Any] = None
+                    bitfield_size: Optional[int] = None
+                    if len(field_elem) == 2:
+                        field_name, field_type = field_elem
+                    elif len(field_elem) == 3:
+                        field_name, field_type, bitfield_size = field_elem
+                    field_table[field_name] = [field_type, bitfield_size]
+            elif hasattr(class_obj, "__annotations__"):
+                for field_elem in class_obj.__annotations__.items():
+                    if len(field_elem) == 2:
+                        field_name, field_type = field_elem
+                        bitfield_size = None
+                    elif len(field_elem) == 3:
+                        field_name, field_type, bitfield_size = field_elem
+                    else:
+                        raise ValueError(
+                            "Number of fields in items() of class object unexpected"
+                        )
+                    field_table[field_name] = [field_type, bitfield_size]
+            else:
+                raise TypeError("Could not get required class and definition")
+
+            logger.debug(f"Extracted fields for {current_symbol_name}: {field_table}")
+            for elem in field_table.items():
+                elem_name, elem_temp_list = elem
+                [elem_type, elem_bitfield_size] = elem_temp_list
+                local_module_name = getattr(elem_type, "__module__", None)
+                new_dep_node.add_field(elem_name, elem_type, ready=False)
+
+                if local_module_name == ctypes.__name__:
+                    # TODO: need to process pointer to ctype and also CFUNCTYPES here recursively. Current processing is a single dereference
+                    new_dep_node.set_field_bitfield_size(elem_name, elem_bitfield_size)
+
+                    # Process pointer to ctype
+                    if isinstance(elem_type, type) and issubclass(
+                        elem_type, ctypes._Pointer
+                    ):
+                        # Get the pointed-to type
+                        pointed_type = elem_type._type_
+                        logger.debug(f"Found pointer to type: {pointed_type}")
+                        new_dep_node.set_field_containing_type(elem_name, pointed_type)
+                        new_dep_node.set_field_ctype_complex_type(
+                            elem_name, ctypes._Pointer
+                        )
+                        new_dep_node.set_field_ready(elem_name, is_ready=True)
+
+                    # Process function pointers (CFUNCTYPE)
+                    elif hasattr(elem_type, "_restype_") and hasattr(
+                        elem_type, "_argtypes_"
+                    ):
+                        # This is a CFUNCTYPE or similar
+                        logger.info(
+                            f"Function pointer detected for {elem_name} with return type {elem_type._restype_} and arguments {elem_type._argtypes_}"
+                        )
+                        # Set the field as ready but mark it with special handling
+                        new_dep_node.set_field_ctype_complex_type(
+                            elem_name, ctypes.CFUNCTYPE
+                        )
+                        new_dep_node.set_field_ready(elem_name, is_ready=True)
+                        logger.warning(
+                            "Blindly processing CFUNCTYPE ctypes to ensure compilation. Unsupported"
+                        )
+
+                    else:
+                        # Regular ctype
+                        new_dep_node.set_field_ready(elem_name, is_ready=True)
+                        logger.debug(
+                            f"Field {elem_name} is direct ctypes type: {elem_type}"
+                        )
+                elif local_module_name == "vmlinux":
+                    new_dep_node.set_field_bitfield_size(elem_name, elem_bitfield_size)
+                    logger.debug(
+                        f"Processing vmlinux field: {elem_name}, type: {elem_type}"
+                    )
+                    if hasattr(elem_type, "_type_"):
+                        is_complex_type = True
+                        containing_type = elem_type._type_
+                        if hasattr(elem_type, "_length_") and is_complex_type:
+                            type_length = elem_type._length_
+
+                        # Unwrap all pointer layers to get the base type for dependency tracking
+                        base_type = unwrap_pointer_type(elem_type)
+                        base_type_module = getattr(base_type, "__module__", None)
+
+                        if base_type_module == "vmlinux":
+                            base_type_name = (
+                                base_type.__name__
+                                if hasattr(base_type, "__name__")
+                                else str(base_type)
+                            )
+                            # ONLY add vmlinux types as dependencies
+                            new_dep_node.add_dependent(base_type_name)
+
+                            logger.debug(
+                                f"{containing_type} containing type of parent {elem_name} with {elem_type} and ctype {ctype_complex_type} and length {type_length}"
+                            )
+                            new_dep_node.set_field_containing_type(
+                                elem_name, containing_type
+                            )
+                            new_dep_node.set_field_type_size(elem_name, type_length)
+                            new_dep_node.set_field_ctype_complex_type(
+                                elem_name, ctype_complex_type
+                            )
+                            new_dep_node.set_field_type(elem_name, elem_type)
+
+                            # Check the containing_type module to decide whether to recurse
+                            containing_type_module = getattr(
+                                containing_type, "__module__", None
+                            )
+                            if containing_type_module == "vmlinux":
+                                # Also unwrap containing_type to get base type name
+                                base_containing_type = unwrap_pointer_type(
+                                    containing_type
+                                )
+                                containing_type_name = (
+                                    base_containing_type.__name__
+                                    if hasattr(base_containing_type, "__name__")
+                                    else str(base_containing_type)
+                                )
+
+                                # Check for self-reference or already processed
+                                if containing_type_name == current_symbol_name:
+                                    # Self-referential pointer
+                                    logger.debug(
+                                        f"Self-referential pointer in {current_symbol_name}.{elem_name}"
+                                    )
+                                    new_dep_node.set_field_ready(elem_name, True)
+                                elif handler.has_node(containing_type_name):
+                                    # Already processed
+                                    logger.debug(
+                                        f"Reusing already processed {containing_type_name}"
+                                    )
+                                    new_dep_node.set_field_ready(elem_name, True)
+                                else:
+                                    # Process recursively - use base containing type, not the pointer wrapper
+                                    new_dep_node.add_dependent(containing_type_name)
+                                    process_vmlinux_post_ast(
+                                        base_containing_type,
+                                        llvm_handler,
+                                        handler,
+                                        processing_stack,
+                                    )
+                                    new_dep_node.set_field_ready(elem_name, True)
+                            elif (
+                                containing_type_module == ctypes.__name__
+                                or containing_type_module is None
+                            ):
+                                logger.debug(
+                                    f"Processing ctype internal{containing_type}"
+                                )
+                                new_dep_node.set_field_ready(elem_name, True)
+                            else:
+                                raise TypeError(
+                                    f"Module not supported in recursive resolution: {containing_type_module}"
+                                )
+                        elif (
+                            base_type_module == ctypes.__name__
+                            or base_type_module is None
+                        ):
+                            # Handle ctypes or types with no module (like some internal ctypes types)
+                            # DO NOT add ctypes as dependencies - just set field metadata and mark ready
+                            logger.debug(
+                                f"Base type {base_type} is ctypes - NOT adding as dependency, just processing field"
+                            )
+                            if isinstance(elem_type, type):
+                                if issubclass(elem_type, ctypes.Array):
+                                    ctype_complex_type = ctypes.Array
+                                elif issubclass(elem_type, ctypes._Pointer):
+                                    ctype_complex_type = ctypes._Pointer
+                                else:
+                                    raise ImportError(
+                                        "Non Array and Pointer type ctype imports not supported in current version"
+                                    )
+                            else:
+                                raise TypeError("Unsupported ctypes subclass")
+
+                            # Set field metadata but DO NOT add dependency or recurse
+                            new_dep_node.set_field_containing_type(
+                                elem_name, containing_type
+                            )
+                            new_dep_node.set_field_type_size(elem_name, type_length)
+                            new_dep_node.set_field_ctype_complex_type(
+                                elem_name, ctype_complex_type
+                            )
+                            new_dep_node.set_field_type(elem_name, elem_type)
+                            new_dep_node.set_field_ready(elem_name, True)
+                        else:
+                            raise ImportError(
+                                f"Unsupported module of {base_type}: {base_type_module}"
+                            )
+                    else:
+                        new_dep_node.add_dependent(
+                            elem_type.__name__
+                            if hasattr(elem_type, "__name__")
+                            else str(elem_type)
+                        )
+                        process_vmlinux_post_ast(
+                            elem_type,
+                            llvm_handler,
+                            handler,
+                            processing_stack,
+                        )
+                        new_dep_node.set_field_ready(elem_name, True)
+                else:
+                    raise ValueError(
+                        f"{elem_name} with type {elem_type} from module {module_name} not supported in recursive resolver"
+                    )
+
+            # Anonymous struct/union members expose their members on the parent
+            # in C and in ctypes, but they are invisible to the top-level
+            # _fields_ walk above. Register them too. No-op without _anonymous_.
+            flatten_anonymous_members(class_obj, new_dep_node)
+    elif module_name == ctypes.__name__ or module_name is None:
+        # Handle ctypes types - these don't need processing, just return
+        logger.debug(f"Skipping ctypes type {current_symbol_name}")
+        return True
+    else:
+        raise ImportError(f"UNSUPPORTED Module {module_name}")
+
+    logger.info(
+        f"{current_symbol_name} processed and handler readiness {handler.is_ready}"
+    )
+    return True

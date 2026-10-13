@@ -1,0 +1,39 @@
+[THREAD] Main poll: ident=140112443282880 native=2245546
+[TIMING] BPF init CPU: 0.914s  wall: 1.686s
+[RUSAGE] init maxrss=166532KB minflt=14752 majflt=41 inblock=47320 oublock=8 nvcsw=31744 nivcsw=4 utime=0.584s stime=0.494s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Setup CPU: 0.002s  wall: 0.003s
+[RUSAGE] setup maxrss=166532KB minflt=14752 majflt=41 inblock=47320 oublock=8 nvcsw=31752 nivcsw=4 utime=0.584s stime=0.494s | children utime=0.000s stime=0.000s maxrss=0KB
+Starting poll... (Ctrl+C to stop)
+CPU [1] UID 1000 comm: gen_exec, count: 2
+CPU [1] UID 1000 comm: gen_exec, count: 3
+CPU [1] UID 1000 comm: gen_exec, count: 4
+CPU [1] UID 1000 comm: gen_exec, count: 5
+CPU [1] UID 1000 comm: gen_exec, count: 6
+CPU [1] UID 1000 comm: gen_exec, count: 7
+CPU [1] UID 1000 comm: gen_exec, count: 8
+CPU [1] UID 1000 comm: gen_exec, count: 9
+CPU [1] UID 1000 comm: gen_exec, count: 10
+CPU [1] UID 1000 comm: gen_exec, count: 11
+CPU [1] UID 1000 comm: gen_exec, count: 12
+CPU [1] UID 1000 comm: gen_exec, count: 13
+CPU [1] UID 1000 comm: gen_exec, count: 14
+CPU [1] UID 1000 comm: gen_exec, count: 15
+CPU [1] UID 1000 comm: gen_exec, count: 16
+CPU [1] UID 1000 comm: gen_exec, count: 17
+CPU [1] UID 1000 comm: gen_exec, count: 18
+CPU [1] UID 1000 comm: gen_exec, count: 19
+CPU [1] UID 1000 comm: gen_exec, count: 20
+CPU [1] UID 1000 comm: gen_exec, count: 21
+CPU [1] UID 1000 comm: gen_exec, count: 22
+CPU [1] UID 1000 comm: gen_exec, count: 23
+CPU [1] UID 1000 comm: gen_exec, count: 24
+CPU [1] UID 1000 comm: gen_exec, count: 25
+CPU [1] UID 1000 comm: gen_exec, count: 26
+CPU [1] UID 1000 comm: gen_exec, count: 27
+CPU [1] UID 1000 comm: gen_exec, count: 28
+CPU [1] UID 1000 comm: gen_exec, count: 29
+[TIMING] Poll loop CPU: 0.110s  wall: 2.026s
+[RUSAGE] poll maxrss=166532KB minflt=14753 majflt=41 inblock=47320 oublock=8 nvcsw=36683 nivcsw=4 utime=0.644s stime=0.544s | children utime=0.000s stime=0.000s maxrss=0KB
+[TIMING] Total CPU: 1.026s  wall: 3.715s
+[SUMMARY] Events in map: 30
+[RUSAGE] after-summary maxrss=166532KB minflt=14755 majflt=41 inblock=47320 oublock=8 nvcsw=36699 nivcsw=4 utime=0.644s stime=0.544s | children utime=0.000s stime=0.000s maxrss=0KB

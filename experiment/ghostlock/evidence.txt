@@ -1,0 +1,51 @@
+GhostLock (CVE-2026-43499) Python-BPF tracker — verification evidence
+Host: vmnono, kernel 6.12.0-160100.7-default x86_64, pythonbpf 0.2.0
+(/root/experiment/.venv), LLVM 21.1.8 (BPF target registered)
+Date: 2026-10-10
+
+FILES
+  ghostlock_futex_watch.py   tracker (kprobe/do_futex, printk -> trace_pipe)
+  ghostlock_enforce.py       tracker + userspace enforcer (SIGKILL on tag=3)
+  trigger_pi_futex.c         emits the GhostLock op set; `hold` keeps it alive
+
+1) PROBE-POINT FINDING (why do_futex, not __x64_sys_futex)
+   tracefs p:gl2 __x64_sys_futex di=%di si=%si dx=%dx ax=%ax
+      (__x64_sys_futex+0x4/0x1d0) di=0xff7d1a29c2567f48 si=0xca dx=0x0 ax=0xffffffffffffffff
+   -> at the sys_* wrapper the op is NOT in a register (rsi=0xca = syscall nr 202,
+      rdi = struct pt_regs *). Reaching the args needs a two-step deref PBPF
+      cannot emit.
+   tracefs p:gl3 do_futex di=%di si=%si dx=%dx
+      (do_futex+0x4/0x190) di=0x7fe827857000 si=0x6  dx=0x0
+      (do_futex+0x4/0x190) di=0x7fe827856000 si=0x86 dx=0x0
+      (do_futex+0x4/0x190) di=0x7fe827856000 si=0xb  dx=0x1
+      (do_futex+0x4/0x190) di=0x7fe827856000 si=0x8b dx=0x1
+      (do_futex+0x4/0x190) di=0x7fe827857000 si=0xc  dx=0x1
+      (do_futex+0x4/0x190) di=0x7fe827857000 si=0x8c dx=0x1
+      (do_futex+0x4/0x190) di=0x7fe827857000 si=0x7  dx=0x0
+      (do_futex+0x4/0x190) di=0x7fe827856000 si=0x87 dx=0x0
+   -> do_futex passes the op as a plain 2nd argument: op == rsi == ctx.si.
+
+2) TRACKER RUN (kprobe/do_futex, single printk, tag = 1/2/3)
+   attached kprobe/do_futex  (ATTACHED_AFTER=5s)
+   --- ./trigger_pi_futex ---
+   GHOSTLOCK op=6   tag=1 pid=3132122     FUTEX_LOCK_PI
+   GHOSTLOCK op=134 tag=1 pid=3132122     FUTEX_LOCK_PI|PRIVATE
+   GHOSTLOCK op=11  tag=2 pid=3132122     FUTEX_WAIT_REQUEUE_PI
+   GHOSTLOCK op=139 tag=2 pid=3132122     FUTEX_WAIT_REQUEUE_PI|PRIVATE
+   GHOSTLOCK op=12  tag=3 pid=3132122     FUTEX_CMP_REQUEUE_PI   <- exploit trigger
+   GHOSTLOCK op=140 tag=3 pid=3132122     FUTEX_CMP_REQUEUE_PI|PRIVATE
+   (UNLOCK_PI 7/135 correctly not reported)
+
+3) ENFORCER RUN (trace_pipe -> SIGKILL on tag=3)
+   ENFORCER signal op=6  tag=1 pid=3132382
+   ENFORCER signal op=11 tag=2 pid=3132382
+   ENFORCER signal op=12 tag=3 pid=3132382
+   ENFORCER KILLED pid=3132382
+   BLOCK_OK pid=3132382 killed by enforcer        (trigger started with `hold`)
+
+4) COMPILER/CODEGEN LIMITS HIT WHILE BUILDING THIS
+   * 8 ctx fields in one print  -> program loads+attaches, zero trace output
+   * 5 printk statements        -> program loads+attaches, zero trace output
+   * 1 printk, <=3 args         -> works (this tracker)
+   * struct-valued map, multi-section struct_pt_regs, buffer arrays, probe_read
+     chains: avoided by design (see the vault limitation notes)

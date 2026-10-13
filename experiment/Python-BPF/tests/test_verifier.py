@@ -1,0 +1,82 @@
+"""
+Level 3 — Kernel verifier tests.
+
+For every passing BPF test file, compiles to a .o and runs:
+    sudo bpftool prog load <file.o> /sys/fs/bpf/bpf_prog_test_<id>
+
+These tests are opt-in: they require sudo and kernel access, and are gated
+behind the `verifier` pytest mark. Run with:
+
+    pytest tests/test_verifier.py -m verifier -v
+
+Note: uses the venv Python binary for any in-process calls, but bpftool
+itself is invoked via subprocess with sudo. Ensure bpftool is installed
+and the user can sudo.
+"""
+
+import logging
+from pathlib import Path
+
+import pytest
+
+from tests.framework.collector import collect_all_test_files
+from tests.framework.compiler import run_ir_generation, run_llc
+from tests.framework.verifier import verify_object
+
+
+def _verifier_test_files():
+    return [c.path for c in collect_all_test_files()]
+
+
+def _verifier_test_ids():
+    return [c.rel_path for c in collect_all_test_files()]
+
+
+def _get_rejection_reason(verifier_test_file: Path, output) -> str:
+    # Extract the reason for rejection from the verifier output
+    errstr = f"Verifier rejected {verifier_test_file.name}:\n"
+    errstr += "=" * 80 + "\n"
+    errstr += f"stdout:\n{output.stdout}\n"
+    errstr += "=" * 80 + "\n"
+    errstr += f"stderr:\n{output.stderr}\n"
+    errstr += "=" * 80 + "\n"
+    return errstr
+
+
+# Every test file runs at this level, including the ones declared in
+# test_config.toml. conftest marks those xfail, so an "ir"- or "llc"-level
+# failure is still reported as an expected failure rather than being silently
+# dropped from the level-3 run — and a "verifier"-level entry becomes possible
+# at all.
+@pytest.mark.verifier
+@pytest.mark.parametrize(
+    "verifier_test_file",
+    _verifier_test_files(),
+    ids=_verifier_test_ids(),
+)
+def test_kernel_verifier(verifier_test_file: Path, tmp_path, caplog, request):
+    """Compile the BPF test and verify it passes the kernel verifier."""
+    ll_path = tmp_path / "output.ll"
+    obj_path = tmp_path / "output.o"
+
+    run_ir_generation(verifier_test_file, ll_path)
+
+    error_records = [r for r in caplog.records if r.levelno >= logging.ERROR]
+    assert not error_records, "IR generation produced ERROR log(s):\n" + "\n".join(
+        f"  [{r.name}] {r.getMessage()}" for r in error_records
+    )
+
+    run_llc(ll_path, obj_path)
+    assert obj_path.exists() and obj_path.stat().st_size > 0
+
+    ok, output = verify_object(obj_path)
+    expected = request.node.get_closest_marker("verifier_match")
+    if not ok and expected is not None and expected.args[0] not in output.stderr:
+        # pytest.fail raises an OutcomeException, which the xfail marker's
+        # raises=Exception does not swallow: a rejection for the wrong
+        # reason is a failure, not the expected one.
+        pytest.fail(
+            f"{verifier_test_file.name}: rejected, but not for the expected reason "
+            f"{expected.args[0]!r}:\n{output.stderr}"
+        )
+    assert ok, _get_rejection_reason(verifier_test_file, output)
