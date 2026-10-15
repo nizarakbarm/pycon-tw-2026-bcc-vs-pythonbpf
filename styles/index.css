@@ -111,3 +111,25 @@
   max-width: 100%;
   overflow: hidden;
 }
+
+/* Section divider: this deck uses it for a heading plus one subtitle line, so
+ * centre the whole slot block instead of letting the built-in layout top-align
+ * it. Note this deck is `theme: slidev-theme-nord`; themes/osas is a DIFFERENT
+ * deck's theme and its styles never load here. Rules for this deck belong in
+ * this file, which Slidev imports as the deck root's styles/index.css. */
+.slidev-layout.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.slidev-layout.section h1 {
+  margin: 0;
+}
+
+.slidev-layout.section p {
+  margin: 0.6rem 0 0;
+  font-size: 1.05rem;
+}
