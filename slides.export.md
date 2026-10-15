@@ -2,13 +2,15 @@
 # Export entry. The addon's code-server keeps a socket open and `slidev export`
 # waits for networkidle, which then never arrives (14 s becomes 250 s or a
 # timeout), so this entry deliberately omits the livecode addon. That means the
-# two <Editor /> slides cannot resolve here: their component comes from the
-# addon. So this entry imports slides.md in two ranges, skipping slide 9
-# (`From BCC C-String to Python-BPF`) and slide 13 (`How we run one arm`).
-# `slidev dev slides.md` is the presentation entry and keeps both.
+# <Editor /> slides cannot resolve here: their component comes from the addon.
+# So this entry imports slides.md in four ranges, skipping the three Editor
+# slides: 9 (`From BCC C-String to Python-BPF`), 13 (`How we run one arm`) and
+# 23 (`Limitation 1 — Python-BPF cannot deny a syscall`).
+# `slidev dev slides.md` is the presentation entry and keeps all three.
 #
 # `src:` is read from SLIDE frontmatter (see @slidev/parser fs.mjs:81), and a
-# `#N-M` suffix selects a slide range.
+# `#N-M` suffix selects a slide range. Ranges are by slides.md slide NUMBER, so
+# they must be updated whenever a slide is added or removed above an Editor.
 theme: slidev-theme-nord
 layout: center
 class: text-center
@@ -28,5 +30,9 @@ src: ./slides.md#10-12
 ---
 
 ---
-src: ./slides.md#14-32
+src: ./slides.md#14-22
+---
+
+---
+src: ./slides.md#24-32
 ---

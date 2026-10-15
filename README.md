@@ -66,12 +66,12 @@ Nothing you need to check a number in the talk is missing: all 36 program logs, 
 
 ## Limitations the talk reports
 
-Six, all live. Each is a Python-BPF gap, and each is a compiler or helper gap rather than a design limit. Two are visible in this tree:
+Four, all live. Each is a Python-BPF gap, and each is a compiler or helper gap rather than a design limit. Two are visible in this tree:
 
+- **No in-kernel deny, so enforcement is a userspace kill.** Python-BPF cannot attach a BPF-LSM program, cannot call `bpf_override_return`, and cannot call `bpf_send_signal`. The consequence is ordering: a userspace kill acts after the syscall returns, while a seccomp filter acts before it, so a kill cannot block the call that is already running. `experiment/ghostlock/` is the end-to-end demo.
 - **Two sections on one register struct.** A program with two sections that both take `struct_pt_regs` loads and attaches, and prints garbage, with no error. `experiment/Python-BPF/BCC-Examples/disksnoop.py` is that shape: `kprobe/blk_mq_end_request` and `kprobe/blk_mq_start_request`, both typed `struct_pt_regs`.
-- **Silent codegen traps.** Eight context fields in one `printk`, or five `printk` statements, compile and attach and emit zero trace output.
 
-The other four: a struct as a map-value that cannot be written through (`opt: invalid getelementptr indices`); no in-kernel deny helper, so enforcement runs in user space; a userspace kill acts after the syscall while a seccomp filter acts before it; and no two-step kernel read, so a kernel string cannot be dereferenced.
+The other two: no two-step kernel read, so a kernel string cannot be dereferenced; and silent codegen traps, where eight context fields in one `printk`, or five `printk` statements, compile and attach and emit zero trace output. A struct as a map-value that cannot be written through (`opt: invalid getelementptr indices`) is a fifth gap we name in the talk but do not count as its own, because it shares the translator cause with the silent traps.
 
 ## Reproducing
 

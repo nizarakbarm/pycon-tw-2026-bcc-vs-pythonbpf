@@ -458,14 +458,84 @@ layout: default
 | syscall | BCC | Python-BPF |
 |---|---|---|
 | gettid | 1,907,735 | 3 |
-| poll | 1,978,114 | 1 |
-| total calls | 3,913,286 | 2,055,624 |
-| calls per event | 1.96 | 1.03 |
+| perf buffer wait | `poll` 1,978,114 | `epoll_wait` 2,037,562 |
+| bpf + perf_event_open | 19 | 31 |
 
-`strace -f -T`, 2M count arm. Every syscall counted. Counts only, not durations.
+Same perf fds. Same 1 ms timeout. Same once per event.
+
+<v-click>
+
+The wait is not eBPF work. Next slide traces the descriptors.
+
+</v-click>
+
+`strace -f -T`, 2M count arm. Counts only, not durations.
 
 <!--
-Data: results/straceT, 2M count arm, rank files. BCC calls gettid 1,907,735 times, close to once per event, and polls 1,978,114 times. Python-BPF calls gettid 3 times, at startup only, and polls once. Total calls: BCC 3,913,286 against Python-BPF 2,055,624, which is 1.96 against 1.03 calls per event. Durations from this pass are not usable, because strace intercepts the syscall under study, so read counts only.
+Lead with gettid, because it is the one real per-event cost. BCC calls gettid 1,907,735 times, close to once per event. Python-BPF calls it 3 times, at startup only.
+
+Do not say Python-BPF polls once. That came from the wrong row of the rank file.
+
+Both frameworks wait on the same three perf buffer fds with a 1 ms timeout, once per event; only the syscall name differs. The next slide proves that by tracing the fds.
+
+The real eBPF syscalls are small and nearly equal: bpf 15 against 27, perf_event_open 4 against 4. Do not read the two million waits as eBPF activity.
+
+Total calls: BCC 3,913,286 against Python-BPF 2,055,624, which is 1.96 against 1.03 calls per event. Python-BPF is lower even though it waits slightly more, because it does not pay a gettid per event.
+
+Data: results/straceT, 2M count arm, strace -f -T unfiltered. Durations from this pass are not usable, because strace intercepts the syscall under study, so read counts only.
+-->
+
+---
+layout: default
+---
+
+# Both wait on the same perf fds
+
+<div class="grid grid-cols-2 gap-6 text-[13px]">
+
+<div>
+
+**BCC** — one process,
+no children under `-f`
+
+```text
+perf_event_open  -> fd 9, 10, 11
+poll([{fd=9},{fd=10},{fd=11}], 3, 1)
+  = 0 (Timeout)          x 1,978,114
+```
+
+</div>
+
+<div>
+
+**Python-BPF** — three processes,
+two are `llc`, zero waits each
+
+```text
+perf_event_open  -> fd 10, 11, 12
+epoll_create1    -> fd 9
+epoll_ctl(9, ADD, 10/11/12)   x 3
+epoll_wait(9, [], 3, 1)      x 2,037,562
+```
+
+</div>
+
+</div>
+
+The wait is a userspace loop, not eBPF kernel work.
+
+<!--
+This slide answers one challenge: are those two million waits really eBPF? No, and tracing the fds settles it rather than reading syscall names.
+
+BCC, one process, no children under -f. perf_event_open returns fds 9, 10 and 11. Every wait is poll on that same fd set, 1,978,114 times.
+
+Python-BPF, three processes; the extra two are llc children and make no waits at all. perf_event_open returns fds 10, 11, 12 plus fd 7. epoll_create1 gives fd 9, and epoll_ctl registers the three perf fds into it, 3 calls. Every wait is epoll_wait on that same fd 9, 2,037,562 times.
+
+So both figures are the perf buffer wait. The fd is the proof: epoll_wait is on the fd that holds the perf fds.
+
+Contrast the real eBPF syscalls, which are small and nearly equal: bpf 15 against 27, perf_event_open 4 against 4, memfd_create 1 against 2. If someone reads two million waits as two million eBPF operations, they are misreading a polling loop.
+
+Data: results/straceT, 2M count arm, strace -f -T unfiltered. Counts only, not durations.
 -->
 
 ---
@@ -490,30 +560,12 @@ Data: results/unprofiled, 2M count arm, [TIMING]. Wall is 1763.6 s for BCC and 1
 -->
 
 ---
-layout: default
----
-
-# Three ways to get this wrong
-
-| trap | what it does | evidence |
-|---|---|---|
-| a long drain | adds CPU that is not the event | `T=15` at N=2000 fell to `T=0.5` |
-| the profiler | roughly doubles the CPU it measures | 134.6 s becomes 242.9 s |
-| small N | measures startup, not per-event cost | 2.1x at N=2000, 1.30x at 2M |
-
-Every number in this talk is CPU time, at 2M events.
-
-<!--
-Data: results/unprofiled. A drain longer than the work it drains adds CPU that is not the event: the T=15 drain at small N was about 30 times larger than the work it drained, and correcting it to T=0.5 dropped poll CPU and widened the gap. The profiler unwinds in the target's own context, so pass 3 absolute CPU sits about 80 percent above pass 1: 134.6 s un-profiled against 242.9 s under perf record, both BCC count at 2M. Small N measures the amortisation curve, not per-event cost: about 2.1x at N=2000 against 1.30x at 2M.
--->
-
----
 layout: section
 ---
 
 # Limitations
 
-Seven gaps in Python-BPF, and one open question.
+Four gaps in Python-BPF, and one open question.
 
 ---
 layout: default
@@ -527,34 +579,33 @@ layout: default
 | `bpf_override_return` | no |
 | `bpf_send_signal` | no |
 
-Enforcement runs outside the program.
+So enforcement is a userspace kill, and a kill lands **after** the syscall.
+
+<Editor
+  session="ghostlock-enforce"
+  defaultFolder="experiment/ghostlock"
+  openFile="experiment/ghostlock/ghostlock_enforce.py"
+  :fontSize="11"
+  hideMinimap hideActivityBar hideStatusBar
+  disableInitialFocus preload
+  class="h-[190px] w-full"
+/>
 
 <!--
-Source: 10-10. Python-BPF has no way to deny a syscall inside the kernel. It cannot attach a BPF-LSM program, cannot call bpf_override_return, and cannot call bpf_send_signal. The end-to-end GhostLock demo on vmnono shows this: the tracker is a BPF program, and the enforcement is a userspace SIGKILL. XDP drop is the only honoured verdict. So enforcement runs outside the program.
+One limitation, two sides. First the gap: Python-BPF has no way to deny a syscall inside the kernel. It cannot attach a BPF-LSM program, cannot call bpf_override_return, cannot call bpf_send_signal. XDP drop is the only honoured verdict.
+
+Then the consequence, which is the live file. Because there is no in-kernel deny, enforcement has to be a userspace kill: the kernel program signals FUTEX_CMP_REQUEUE_PI (tag 3), trace_pipe carries the line out, and this process sends SIGKILL.
+
+Look at the order in the log. The trigger issues op=12 tag=3, and only after that does ENFORCER KILLED arrive. The kill lands after the syscall ran, so the vulnerable path has already executed by the time the process dies. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot. Enforcement outside the program is not enforcement of the program.
+
+Evidence: experiment/ghostlock/evidence.txt, section 3. Source: 10-10. Needs slidev dev; a static build shows a placeholder here.
 -->
 
 ---
 layout: default
 ---
 
-# Limitation 2 — A kill is not a block
-
-| stop method | when it acts |
-|---|---|
-| userspace kill | after the syscall |
-| seccomp filter | before it |
-
-The vulnerable path already ran.
-
-<!--
-Source: 10-10. A userspace kill acts after the syscall returns. A seccomp filter acts before it. So a kill cannot block the syscall that is already running, and the vulnerable path has already run by the time the process dies. That is the difference between stopping a process and denying an action.
--->
-
----
-layout: default
----
-
-# Limitation 3 — Two sections, one register struct
+# Limitation 2 — Two sections, one register struct
 
 `struct_pt_regs` contains **union** members. Two sections that share it break the debug metadata.
 
@@ -586,7 +637,7 @@ One caution. The note records a compile-time RecursionError. Disksnoop, which is
 layout: default
 ---
 
-# Limitation 4 — Python-BPF cannot read a kernel string
+# Limitation 3 — Python-BPF cannot read a kernel string
 
 `ctx.si` holds a `struct filename *`. Three attempts to read its name:
 
@@ -624,7 +675,7 @@ Source: "Python-BPF Probe Read of ctx.si Returns Garbage", 2026-07-25, measured 
 layout: default
 ---
 
-# Limitation 5 — Two gaps in the translator
+# Limitation 4 — Two gaps in the translator
 
 | construct | what happens |
 |---|---|
@@ -686,6 +737,38 @@ Click 2: the part that belongs in a talk about Python-BPF. The count is not the 
 An earlier reading of this slide said a program with eight context fields, or five separate print statements, goes silent. That is evidence.txt section 4, measured while building the GhostLock tracker, and it does not separate two causes. The measured kernel rule is the four-value case, so state that and not the other.
 -->
 
+
+---
+layout: default
+---
+
+# Do these limitations rule Python-BPF out anywhere?
+
+Yes — for **enforcement**.
+
+| job | Python-BPF | why |
+|---|---|---|
+| measure, trace, count | yes | the event path is what we measured |
+| deny a syscall | **no** | no in-kernel verdict |
+| block before the call | **no** | a kill acts after it |
+
+<v-click>
+
+And there are more we have not found. What have you hit?
+
+</v-click>
+
+For measurement, Python-BPF is the faster tool. For a deny job, choose one that can deny.
+
+<!--
+This is the payoff slide for the limitation block, and it ends on a question rather than a summary. Answer directly, then invite the room.
+
+Yes, the limitations rule Python-BPF out for exactly one family of jobs: anything that must enforce, meaning deny an action or block a syscall before it runs. Limitation 1 is the reason. Python-BPF has no in-kernel verdict: no BPF-LSM section, no bpf_override_return, no bpf_send_signal. The live file on limitation 1 shows what that costs: a userspace kill lands after the syscall has already returned, so the vulnerable path has run. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot.
+
+Then the hook. Every limitation in this talk came from building a real tool, and four is where our experience stops, not where Python-BPF stops. Ask the room what they have hit. Say it and wait; do not fill the silence. Any answer is useful, and one may become the next slide.
+
+If a question comes about a specific job, ask two things: does it need to deny, and does it need to deny inside the kernel. Only the second one rules Python-BPF out.
+-->
 
 ---
 layout: default
