@@ -61,7 +61,7 @@ The published tree holds only valid arms. Defective and duplicate runs are kept 
 
 | dir | contents |
 |---|---|
-| `straceT/_failed/` | 2 arms (6 files) that did not deliver `N+1` — the trigger-race cases above |
+| `straceT/_failed/` | 2 arms (6 files) that did not reach the trigger's `N` — the trigger-race cases above |
 | `straceT/_dup/` | 2 arms (6 files) superseded by a gated re-run of the same `(variant, impl, N)` |
 
 ## Programs (all six, identical structure — only the callback body differs)
@@ -91,7 +91,11 @@ In-program counters. Quote **CPU**, not wall: the trigger is fork-bound and wall
 - `[TIMING]` — `process_time()` deltas per phase (init / setup / poll loop / total)
 - `[RUSAGE]` — peak RSS, page faults, block I/O, context switches, and a **user/sys split**,
   reported for the process **and for reaped children separately**
-- `[SUMMARY] Events in map` — delivery; equals `N+1` (the trigger's own exec adds one)
+- `[SUMMARY] Events in map` — delivery. **The printed value is the event count plus one.**
+  Both programs print `sum(v + 1)` over the map, so a full delivery of `N` events reports
+  `N+1`. For N = 2,000,000 the line reads `2000001` and the true count is `2,000,000`.
+  The `+1` is the summary formula, **not** an extra event and **not** the trigger's own
+  `exec`. Subtract one before quoting it.
 
 > [!important] **Rusage CPU and `[TIMING]` CPU are different accountings and must not be
 > compared to each other.** `[TIMING]` is `process_time()`, self only, scoped to a phase.
@@ -167,8 +171,9 @@ done
   (1.99 per event).
 - **2M is the only N where init has amortised.** Small-N ratios (~2.1×) and 2M ratios
   (~1.2–1.3×) measure the same thing at different points on the amortisation curve.
-- **Delivery is asserted per arm** — `[SUMMARY]` must equal `N+1`. A shortfall means the
-  drain was too short or events were dropped; the harness prints a `WARN`.
+- **Delivery is asserted per arm** — `[SUMMARY]` must equal `N+1` for `N` trigger events,
+  because of the `sum(v + 1)` formula above. A shortfall means the drain was too short or
+  events were dropped; the harness prints a `WARN`.
 
 ## Reproducing
 

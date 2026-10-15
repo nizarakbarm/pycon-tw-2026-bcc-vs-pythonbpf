@@ -72,8 +72,6 @@ flowchart LR
   end
 ```
 
-Both frameworks use the same kernel path.
-
 <!--
 This is the frame for everything that follows. Two boxes: user space and kernel. Both tools sit in the first box, and both use one path in the second box: the same bpf() syscall, the same verifier, the same JIT compiler, the same hook, the same maps. The hook is a tracepoint because the workload is sys_enter_execve. Hold the shape: every measurement in this talk is taken in one of those two boxes, and once the kernel path is shared, any per-event difference has to come from user space. That is what the next slides measure, and it is why the deny gap later is a framework limit and not a kernel one.
 -->
@@ -368,19 +366,21 @@ layout: default
 
 # Both frameworks deliver every event
 
-| | events delivered | expected |
+| | events delivered | trigger sent |
 |---|---|---|
-| BCC | 2,000,001 | 2,000,001 |
-| Python-BPF | 2,000,001 | 2,000,001 |
+| BCC | 2,000,000 | 2,000,000 |
+| Python-BPF | 2,000,000 | 2,000,000 |
 
-Both frameworks delivered 2,000,001 events. Nothing was lost.
+Both frameworks delivered 2,000,000 events. Nothing was lost.
 
 <!--
-Source: 10-08, 10-10. All six 2M arms in results/unprofiled, [SUMMARY] Events in map. Both frameworks delivered 2,000,001 events, which is N plus the trigger's own exec. That is the expected value. The harness warns and quarantines an arm that falls short. Nothing was lost and no arm printed LOST. Delivery is equal, so CPU is the only open question.
+Source: 10-08, 10-10. All six 2M arms in results/unprofiled. The trigger sends N = 2,000,000, and both frameworks delivered every one, so nothing was lost and no arm printed LOST.
+
+Watch the number. The log line reads 2000001, but that is the summary formula, not an event: both programs print sum(v + 1) per map entry, so the reported total is one above the counter. The map held 2,000,000. Say 2,000,000 on stage.
+
+The harness warns and quarantines an arm that falls short of the trigger. Delivery is equal, so CPU is the only open question.
 -->
 
----
-layout: default
 ---
 
 # Python-BPF uses less CPU
@@ -539,7 +539,39 @@ Source: 10-10. A userspace kill acts after the syscall returns. A seccomp filter
 layout: default
 ---
 
-# Limitation 3 — Python-BPF cannot read a kernel string
+# Limitation 3 — Two sections, one register struct
+
+`struct_pt_regs` contains **union** members. Two sections that share it break the debug metadata.
+
+| sections with `struct_pt_regs` | result |
+|---|---|
+| one | compiles |
+| two | debug metadata recurses |
+
+<v-click>
+
+`RecursionError` in `function_debug_info.py:73`.
+
+Workaround: **one section per file.** `kprobe` and `kretprobe` cannot share a file.
+
+</v-click>
+
+<!--
+The cause, in one sentence: struct_pt_regs contains union members, and two sections that share it create circular debug metadata, so the compiler recurses.
+
+Click 1: the failure and the workaround. RecursionError raised in function_debug_info.py line 73. The workaround is one section per file, which is why every GhostLock program holds a single section.
+
+Source: "Python-BPF All Workarounds for struct_pt_regs with Multiple Sections", 2026-05-18, Python-BPF alpha. That note lists five workarounds and recommends one section per file for immediate use, and a union check in function_debug_info.py as the proper fix.
+
+One caution. The note records a compile-time RecursionError. Disksnoop, which is two sections on the same struct, was later observed to load and attach and print wrong values instead. That is a second, quieter failure of the same shape. Do not claim the limit is gone: writing IR is not running correctly. If asked which form you will see, say the compile-time crash is the documented one and the silent wrong-value run is the one we hit on 0.2.0.
+-->
+
+
+---
+layout: default
+---
+
+# Limitation 4 — Python-BPF cannot read a kernel string
 
 `ctx.si` holds a `struct filename *`. Three attempts to read its name:
 
@@ -577,7 +609,7 @@ Source: "Python-BPF Probe Read of ctx.si Returns Garbage", 2026-07-25, measured 
 layout: default
 ---
 
-# Limitation 4 — Two gaps in the translator
+# Limitation 5 — Two gaps in the translator
 
 | construct | what happens |
 |---|---|
@@ -589,38 +621,6 @@ A map counter can lose updates.
 <!--
 Source: 2026-05-11, last audited 2026-05-10, spoken here as a live limit. An array subscript falls to a bare return at expr_pass.py line 730, so no code is emitted for ctx.args[0]. The addition operator maps to a plain builder add at line 227, so count plus one compiles to load, add, store, with a race window between load and store. BCC emits a single atomicrmw with sequential consistency for the same line. So on many CPUs a Python-BPF map counter can lose updates. Both are compiler gaps, not design limits.
 -->
-
----
-layout: default
----
-
-# Limitation 5 — Two sections, one register struct
-
-`struct_pt_regs` contains **union** members. Two sections that share it break the debug metadata.
-
-| sections with `struct_pt_regs` | result |
-|---|---|
-| one | compiles |
-| two | debug metadata recurses |
-
-<v-click>
-
-`RecursionError` in `function_debug_info.py:73`.
-
-Workaround: **one section per file.** `kprobe` and `kretprobe` cannot share a file.
-
-</v-click>
-
-<!--
-The cause, in one sentence: struct_pt_regs contains union members, and two sections that share it create circular debug metadata, so the compiler recurses.
-
-Click 1: the failure and the workaround. RecursionError raised in function_debug_info.py line 73. The workaround is one section per file, which is why every GhostLock program holds a single section.
-
-Source: "Python-BPF All Workarounds for struct_pt_regs with Multiple Sections", 2026-05-18, Python-BPF alpha. That note lists five workarounds and recommends one section per file for immediate use, and a union check in function_debug_info.py as the proper fix.
-
-One caution. The note records a compile-time RecursionError. Disksnoop, which is two sections on the same struct, was later observed to load and attach and print wrong values instead. That is a second, quieter failure of the same shape. Do not claim the limit is gone: writing IR is not running correctly. If asked which form you will see, say the compile-time crash is the documented one and the silent wrong-value run is the one we hit on 0.2.0.
--->
-
 
 ---
 layout: default
