@@ -9,7 +9,7 @@
   --c-surface: #3b4252;
   --c-body: #eceff4;      /* 10.84 on bg */
   --c-muted: #d8dee9;     /*  9.25 on bg */
-  --c-bcc: #eda87f;       /*  6.25 on bg, 5.03 on surface */
+  --c-bcc: #f0883e;       /*  4.93 on bg, orange. AA for normal text. */
   --c-pbpf: #81a1c1;      /*  4.64 on bg — never place on the surface */
   --c-emph: #ebcb8b;      /*  8.00 on bg */
   --c-caution: #e58f96;   /*  5.17 on bg */

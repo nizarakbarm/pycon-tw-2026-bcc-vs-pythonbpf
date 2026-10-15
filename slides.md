@@ -92,7 +92,7 @@ flowchart LR
   end
   OBJ1 --> SAME["loaded BPF<br/>program"]
   OBJ2 --> SAME
-  style BCC stroke:#eda87f,stroke-width:2px
+  style BCC stroke:#f0883e,stroke-width:2px
   style PBPF stroke:#81a1c1,stroke-width:2px
   classDef same fill:#ebcb8b,stroke:#ebcb8b,color:#2e3440
   class SAME same
@@ -382,22 +382,37 @@ The harness warns and quarantines an arm that falls short of the trigger. Delive
 -->
 
 ---
+layout: default
+---
 
 # Python-BPF uses less CPU
 
 ```mermaid
-%%{init: {"xyChart":{"width":800,"height":330},"theme":"base","themeVariables":{"xyChart":{"backgroundColor":"#2e3440","titleColor":"#eceff4","xAxisLabelColor":"#d8dee9","xAxisLineColor":"#4c566a","xAxisTickColor":"#4c566a","yAxisLabelColor":"#d8dee9","yAxisLineColor":"#4c566a","yAxisTickColor":"#4c566a","plotColorPalette":"#eda87f"}}}}%%
+%%{init: {"xyChart":{"width":780,"height":230},"theme":"dark","themeVariables":{"xyChart":{"backgroundColor":"#2e3440","titleColor":"#eceff4","xAxisLabelColor":"#d8dee9","xAxisLineColor":"#4c566a","xAxisTickColor":"#4c566a","yAxisLabelColor":"#d8dee9","yAxisLineColor":"#4c566a","yAxisTickColor":"#4c566a","plotColorPalette":"#f0883e, #81a1c1"}}}}%%
 xychart-beta
-  title "BCC CPU divided by Python-BPF CPU, 2M events"
-  x-axis ["count", "empty", "print"]
-  y-axis "ratio" 1.0 --> 1.35
-  bar [1.30, 1.23, 1.21]
+  title "Total CPU, seconds"
+  x-axis ["1000", "2000", "2M"]
+  y-axis "seconds" 0 --> 145
+  bar [0.625, 0.716, 134.568]
+  bar [0.120, 0.194, 103.658]
 ```
 
-2M events, vmnono, un-profiled pass. BCC 134.6, 103.3 and 111.2 s. Python-BPF 103.7, 84.0 and 92.3 s.
+| N | <span class="bcc">■ BCC</span> | <span class="pbpf">■ Python-BPF</span> | ratio |
+|---|---|---|---|
+| 1000 | <span class="bcc">0.625 s</span> | <span class="pbpf">0.120 s</span> | 5.21 |
+| 2000 | <span class="bcc">0.716 s</span> | <span class="pbpf">0.194 s</span> | 3.69 |
+| **2M** | <span class="bcc">**134.568 s**</span> | <span class="pbpf">**103.658 s**</span> | **1.30** |
 
 <!--
-Data: results/unprofiled, 2M arms, [TIMING] Total CPU. BCC uses 1.30 times the CPU on count, 1.23 on empty, 1.21 on print. Absolute CPU: BCC 134.57, 103.28 and 111.24 s. Python-BPF 103.66, 84.04 and 92.30 s. These are CPU numbers, not wall. Wall agrees between the frameworks because the trigger sets the pace. One host, one instrument.
+Two bars per N: BCC in the warm colour, Python-BPF in the cool one. The table gives the seconds and the ratio.
+
+Read the 2M pair: BCC 134.568 seconds, Python-BPF 103.658. That is the result this talk rests on.
+
+The bars at 1000 and 2000 are short against 2M, and that is real. Both frameworks are dominated by startup there. At 2M that startup has amortised, which is why these are per-event costs.
+
+If someone asks about N equal to 100, we dropped it: its ratio was 7.38, the highest of all, because at 100 events BCC's runtime compile is 83 percent of its total. Keeping it would flatten the other bars.
+
+Data: results/unprofiled, count variant, [TIMING] Total CPU. CPU numbers, not wall.
 -->
 
 ---
