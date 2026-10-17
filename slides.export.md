@@ -5,7 +5,7 @@
 # <Editor /> slides cannot resolve here: their component comes from the addon.
 # So this entry imports slides.md in four ranges, skipping the three Editor
 # slides: 9 (`From BCC C-String to Python-BPF`), 13 (`How we run one arm`) and
-# 23 (`Limitation 1 — Python-BPF cannot deny a syscall`).
+# 24 (`The enforcer, live`).
 # `slidev dev slides.md` is the presentation entry and keeps all three.
 #
 # `src:` is read from SLIDE frontmatter (see @slidev/parser fs.mjs:81), and a
@@ -30,9 +30,9 @@ src: ./slides.md#10-12
 ---
 
 ---
-src: ./slides.md#14-22
+src: ./slides.md#14-23
 ---
 
 ---
-src: ./slides.md#24-32
+src: ./slides.md#25-33
 ---

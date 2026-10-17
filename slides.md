@@ -571,34 +571,50 @@ Four gaps in Python-BPF, and one open question.
 layout: default
 ---
 
-# Limitation 1 — Python-BPF cannot deny a syscall
+# Limitation 1 — A thin helper surface, not a BCC win
 
-| mechanism | Python-BPF |
-|---|---|
-| BPF-LSM program | no |
-| `bpf_override_return` | no |
-| `bpf_send_signal` | no |
+| mechanism | Python-BPF | BCC |
+|---|---|---|
+| BPF-LSM program | no | no |
+| `bpf_override_return` | no | yes, helper present |
+| `bpf_send_signal` | no | yes, helper present |
 
-So enforcement is a userspace kill, and a kill lands **after** the syscall.
+Neither library denies inside the kernel. BCC has the signal helper; Python-BPF has neither.
+
+<!--
+The correction is the point of this slide. It is NOT that BCC can deny and Python-BPF cannot. BCC has no deny either: both libraries observe, neither enforces. What BCC has is more helpers, and two of them reach into enforcement: bpf_override_return and bpf_send_signal are both defined in BCC helpers.h, and neither exists in Python-BPF.
+
+Count the surface: Python-BPF exposes 18 bpf_* helpers, BCC 36. Half. So the honest statement is that Python-BPF has a thinner helper surface than BCC, and the deny-capable helpers are two that BCC has and Python-BPF does not.
+
+Not even BCC denies in the kernel for a general syscall. XDP drop is a verdict; a tracepoint is not. So for a real block, both frameworks do enforcement in userspace, and BCC at least has the signal helper to make that tidier.
+
+Source: 10-10, plus the helper lists in bcc/src/cc/export/helpers.h and pythonbpf/helper/.
+-->
+
+---
+layout: default
+---
+
+# The enforcer, live
 
 <Editor
   session="ghostlock-enforce"
   defaultFolder="experiment/ghostlock"
   openFile="experiment/ghostlock/ghostlock_enforce.py"
-  :fontSize="11"
+  :fontSize="12"
   hideMinimap hideActivityBar hideStatusBar
   disableInitialFocus preload
-  class="h-[190px] w-full"
+  class="h-[415px] w-full"
 />
 
 <!--
-One limitation, two sides. First the gap: Python-BPF has no way to deny a syscall inside the kernel. It cannot attach a BPF-LSM program, cannot call bpf_override_return, cannot call bpf_send_signal. XDP drop is the only honoured verdict.
+Live. This is the real enforcer, from the GhostLock work, and it is what userspace enforcement looks like when the library has no deny helper.
 
-Then the consequence, which is the live file. Because there is no in-kernel deny, enforcement has to be a userspace kill: the kernel program signals FUTEX_CMP_REQUEUE_PI (tag 3), trace_pipe carries the line out, and this process sends SIGKILL.
+The kernel program signals FUTEX_CMP_REQUEUE_PI (tag 3) with one printk. trace_pipe carries the line out, and this process sends SIGKILL. No in-kernel verdict anywhere.
 
-Look at the order in the log. The trigger issues op=12 tag=3, and only after that does ENFORCER KILLED arrive. The kill lands after the syscall ran, so the vulnerable path has already executed by the time the process dies. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot. Enforcement outside the program is not enforcement of the program.
+Look at the order in the log. The trigger issues op=12 tag=3, and only after that does ENFORCER KILLED arrive. The kill lands after the syscall ran, so the vulnerable path has already executed by the time the process dies. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot.
 
-Evidence: experiment/ghostlock/evidence.txt, section 3. Source: 10-10. Needs slidev dev; a static build shows a placeholder here.
+Evidence: experiment/ghostlock/evidence.txt, section 3. Needs slidev dev; a static build shows a placeholder here.
 -->
 
 ---
@@ -749,7 +765,7 @@ Yes — for **enforcement**.
 | job | Python-BPF | why |
 |---|---|---|
 | measure, trace, count | yes | the event path is what we measured |
-| deny a syscall | **no** | no in-kernel verdict |
+| deny a syscall | **no** | no deny helper, and BCC has none either |
 | block before the call | **no** | a kill acts after it |
 
 <v-click>
@@ -763,7 +779,7 @@ For measurement, Python-BPF is the faster tool. For a deny job, choose one that 
 <!--
 This is the payoff slide for the limitation block, and it ends on a question rather than a summary. Answer directly, then invite the room.
 
-Yes, the limitations rule Python-BPF out for exactly one family of jobs: anything that must enforce, meaning deny an action or block a syscall before it runs. Limitation 1 is the reason. Python-BPF has no in-kernel verdict: no BPF-LSM section, no bpf_override_return, no bpf_send_signal. The live file on limitation 1 shows what that costs: a userspace kill lands after the syscall has already returned, so the vulnerable path has run. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot.
+Yes, the limitations rule Python-BPF out for exactly one family of jobs: anything that must enforce, meaning deny an action or block a syscall before it runs. Be precise about why, because the obvious version is wrong. It is not that BCC can deny and Python-BPF cannot: neither library denies a syscall in the kernel, and both are observability tools. What Python-BPF lacks is the helper surface. BCC ships 36 bpf_* helpers including bpf_override_return and bpf_send_signal; Python-BPF ships 18 and has neither. The live enforcer on limitation 1 is what that costs: userspace signals the event out, then kills, and the kill lands after the syscall has already returned, so the vulnerable path has run. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot.
 
 Then the hook. Every limitation in this talk came from building a real tool, and four is where our experience stops, not where Python-BPF stops. Ask the room what they have hit. Say it and wait; do not fill the silence. Any answer is useful, and one may become the next slide.
 
