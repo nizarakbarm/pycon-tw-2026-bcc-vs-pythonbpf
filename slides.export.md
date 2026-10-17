@@ -3,10 +3,9 @@
 # waits for networkidle, which then never arrives (14 s becomes 250 s or a
 # timeout), so this entry deliberately omits the livecode addon. That means the
 # <Editor /> slides cannot resolve here: their component comes from the addon.
-# So this entry imports slides.md in four ranges, skipping the three Editor
-# slides: 9 (`From BCC C-String to Python-BPF`), 13 (`How we run one arm`) and
-# 24 (`The enforcer, live`).
-# `slidev dev slides.md` is the presentation entry and keeps all three.
+# So this entry imports slides.md in three ranges, skipping the three Editor
+# slides: 9 (From BCC C-String to Python-BPF), 10 (How we run one arm) and
+# 24 (The enforcer, live — BCC).
 #
 # `src:` is read from SLIDE frontmatter (see @slidev/parser fs.mjs:81), and a
 # `#N-M` suffix selects a slide range. Ranges are by slides.md slide NUMBER, so
@@ -26,11 +25,7 @@ src: ./slides.md#1-8
 ---
 
 ---
-src: ./slides.md#10-12
----
-
----
-src: ./slides.md#14-23
+src: ./slides.md#11-23
 ---
 
 ---

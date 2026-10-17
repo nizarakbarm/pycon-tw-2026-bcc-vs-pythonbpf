@@ -33,13 +33,19 @@ Systems engineer at **DomaiNesia** · Yogyakarta, Indonesia
 
 - **Focus:** eBPF from Python — kernel observability without writing C
 - **Recently:** Python wrappers for traffic filtering — utilizing **bpfilter**
-- **Today:** PyCon ID 2026 · previously PyCon APAC 2024 · PyCon HK 2025 · PyCon ID 2025
+- **Today:** PyCon Taiwan 2026 · previously PyCon APAC 2024 · PyCon HK 2025 · PyCon ID 2025
 
 ::right::
 
-[github.com/nizarakbar](https://github.com/nizarakbar)
+<img src="./images/nizar_pycon.png" class="rounded-2xl w-52 mx-auto shadow-lg" alt="Nizar Akbar Meilani" />
 
-[talk repo](https://github.com/nizarakbarm/pycon-tw-2026-bcc-vs-pythonbpf)
+<div class="text-[17px] mt-5 space-y-2 break-all leading-snug">
+
+https://github.com/nizarakbar
+
+https://github.com/nizarakbarm/pycon-tw-2026-bcc-vs-pythonbpf
+
+</div>
 
 <!--
 Quick intro. I'm a systems engineer at DomaiNesia — a hosting and cloud provider in Indonesia — building Python tooling for eBPF observability. My approach is data over assumptions, shaped by CTF reverse engineering. This talk is that approach applied to eBPF tooling.
@@ -110,14 +116,20 @@ layout: fact
 
 # Two frameworks, three questions
 
-**Where does state live?** → maps
+**What do maps do?** → state, **and** a channel to userspace or another program
 
-**How does data reach userspace?** → perf event array
+**How does streaming data reach userspace?** → perf event array
 
 **How do you emit an event?** → submit
 
 <!--
-Before we compare, get the three questions straight. Where does state live — maps. How does data reach userspace — the perf event array. How do you emit an event — submit. Every framework spells these three things differently, and that spelling difference is most of what we are about to measure.
+Before we compare, get the three questions straight, and be careful with the first. A map is not only where state lives. Some maps hold state; others are the transport. A perf event array holds no kernel-side state at all: it exists to stream events out to userspace. So maps do two jobs and one word covers both.
+
+Second: how does streaming data reach userspace. The perf event array, and note it is streaming, not a lookup. The kernel program writes an event and userspace reads it as it arrives.
+
+Third: how do you emit an event. Submit, or output, depending on the wrapper.
+
+If someone asks about maps reaching another eBPF program: that is a third job. A map can be shared between programs, which is how program A hands state to program B. Not used here, but do not let the maps-are-state shorthand stand without that caveat.
 -->
 
 ---
@@ -169,7 +181,7 @@ Same kernel map type — BPF_MAP_TYPE_HASH — and the same helpers, lookup and 
 layout: two-cols-header
 ---
 
-# Userspace channel: the perf event array
+# Streaming to userspace: the perf event array
 
 ::left::
 
@@ -227,10 +239,16 @@ layout: default
 | update | `map.update(&key, &val)` | `map.update(key, val)` |
 | emit | `events.perf_submit(ctx,&d,sizeof(d))` | `events.output(d)` |
 | define event | `struct data_t {…}` | `@struct class Event: …` |
-| userspace poll | `b.open_perf_buffer(cb)` + `perf_buffer_poll()` | `PerfEventArray::poll()` |
+| userspace poll | `b.open_perf_buffer(cb)` + `perf_buffer_poll()` | same call, `open_perf_buffer(cb)` + `perf.poll()` |
 
 <!--
-Everything above, side by side. Six rows, same job in each. Keep this table in mind — the rest of the talk is measuring what those spelling differences cost at two million events, and where they cost nothing at all.
+Everything above, side by side, and read the last row carefully because the two are closer than they look.
+
+Python-BPF does NOT have its own userspace read loop. It calls the same open_perf_buffer shape and then perf.poll(), which reaches libbpf perf_buffer__poll. So the API is the same and the poll is the same idea. What differs is underneath: BCC implements the wait itself, libbpf uses an epoll set. That is the perf fd slide, where strace shows poll against epoll_wait.
+
+Do not say Python-BPF has a different polling API. It does not. Same call, different implementation underneath.
+
+Keep this table in mind — the rest of the talk is measuring what those spelling differences cost at two million events, and where they cost nothing at all.
 -->
 
 ---
@@ -251,6 +269,26 @@ layout: default
 
 <!--
 Live. The IDE holds the Python-BPF equivalent of the program: the HashMap counter plus the perf event array for sys_enter_execve. Open the bcc folder beside it to compare. Run it and watch the event counter. This slide needs slidev dev; a static build shows a placeholder here.
+-->
+
+---
+layout: default
+---
+
+# How we run one arm
+
+<Editor
+  session="runner"
+  defaultFolder="experiment"
+  openFile="experiment/scripts/rebenc_unprof.sh"
+  :fontSize="12"
+  hideMinimap hideActivityBar hideStatusBar
+  disableInitialFocus preload
+  class="h-[415px] w-full"
+/>
+
+<!--
+Live. The runner: one arm at a time. It starts the program, sleeps a pre-wait for safety, then waits until the program reports that it is polling before it fires the trigger. That gate matters - a fixed pre-sleep can expire before attach and lose the trigger's whole burst with no LOST line. After the trigger it drains for T, then sends SIGINT and waits for the program to exit. The two arm calls at the end pass 2 s for BCC and 1 s for Python-BPF. This slide needs slidev dev; a static build shows a placeholder here.
 -->
 
 ---
@@ -322,26 +360,6 @@ Both frameworks run the same program.
 
 <!--
 One workload for the talk: sys_enter_execve, driven by 2M fork-plus-execve pairs, on the map_1_perf_timed_count program - a HashMap counter plus a perf event. The trigger is sequential: fork, wait for the child, then fork again. That is why one event costs 0.7-0.9 ms and 2M events take 25-30 minutes. The host is vmnono with three CPUs. Both frameworks run the same program, so any difference belongs to the framework, not the program.
--->
-
----
-layout: default
----
-
-# How we run one arm
-
-<Editor
-  session="runner"
-  defaultFolder="experiment"
-  openFile="experiment/scripts/rebenc_unprof.sh"
-  :fontSize="12"
-  hideMinimap hideActivityBar hideStatusBar
-  disableInitialFocus preload
-  class="h-[415px] w-full"
-/>
-
-<!--
-Live. The runner: one arm at a time. It starts the program, sleeps a pre-wait for safety, then waits until the program reports that it is polling before it fires the trigger. That gate matters - a fixed pre-sleep can expire before attach and lose the trigger's whole burst with no LOST line. After the trigger it drains for T, then sends SIGINT and waits for the program to exit. The two arm calls at the end pass 2 s for BCC and 1 s for Python-BPF. This slide needs slidev dev; a static build shows a placeholder here.
 -->
 
 ---
@@ -491,18 +509,26 @@ layout: default
 
 # Both wait on the same perf fds
 
-<div class="grid grid-cols-2 gap-6 text-[13px]">
+| why the wait syscall differs | BCC | Python-BPF |
+|---|---|---|
+| userspace loader | own (`libbcc`) | **libbpf** via `pylibbpf` |
+| who wrote the wait | BCC | libbpf, an epoll set |
+| mean per wait | 0.660 ms | 0.713 ms |
+
+<div class="grid grid-cols-2 gap-6 text-[12px]">
 
 <div>
 
-**BCC** — one process,
+**BCC** — own loader, own wait,
 no children under `-f`
 
 ```text
 perf_event_open  -> fd 9, 10, 11
 poll([{fd=9},{fd=10},{fd=11}], 3, 1)
-  = 0 (Timeout)          x 1,978,114
+  = 0 (Timeout)   x 1,978,114
 ```
+
+`perf_buffer_poll` -> `BPFTable.cc:510`
 
 </div>
 
@@ -518,24 +544,28 @@ epoll_ctl(9, ADD, 10/11/12)   x 3
 epoll_wait(9, [], 3, 1)      x 2,037,562
 ```
 
-</div>
+`perf_buffer__poll` -> libbpf
 
 </div>
 
-The wait is a userspace loop, not eBPF kernel work.
+</div>
+
+Both return `0 (Timeout)`: the loop wakes on the 1 ms timer, not per event.
 
 <!--
-This slide answers one challenge: are those two million waits really eBPF? No, and tracing the fds settles it rather than reading syscall names.
+Four questions this slide answers. Read the mean as the timeout, not as work: both loops wake on their own timer.
 
-BCC, one process, no children under -f. perf_event_open returns fds 9, 10 and 11. Every wait is poll on that same fd set, 1,978,114 times.
+1) Is there a time per syscall. Yes, strace -T recorded it. poll is 1305.694 s over 1,978,114 calls, 0.660 ms each. epoll_wait is 1451.765 s over 2,037,562 calls, 0.713 ms each. Both land on the 1 ms timeout, because both return 0 (Timeout). So the wait cost is the polling interval, not the framework.
 
-Python-BPF, three processes; the extra two are llc children and make no waits at all. perf_event_open returns fds 10, 11, 12 plus fd 7. epoll_create1 gives fd 9, and epoll_ctl registers the three perf fds into it, 3 calls. Every wait is epoll_wait on that same fd 9, 2,037,562 times.
+2) What happens after poll or epoll_wait. Nothing framework-specific. Both are blocking waits in the userspace process; the kernel wakes the task when the timeout expires or a perf buffer has data. On wake the callback runs, then the loop waits again. The difference is below the API, not above it.
 
-So both figures are the perf buffer wait. The fd is the proof: epoll_wait is on the fd that holds the perf fds.
+3) Why epoll_wait for Python-BPF and poll for BCC. The loader, not the language. Python-BPF goes through pylibbpf, which binds libbpf, and libbpf perf_buffer__poll registers the perf fds into an epoll set and calls epoll_wait. BCC does not use libbpf for this: it has its own loader (libbcc) and its own wait, a plain poll over the fd array. Same three fds, same 1 ms timeout, two implementations. Source: pylibbpf src/maps/perf_event_array.cpp calls perf_buffer__poll; BCC src/cc/api/BPFTable.cc:510 calls epoll_wait.
 
-Contrast the real eBPF syscalls, which are small and nearly equal: bpf 15 against 27, perf_event_open 4 against 4, memfd_create 1 against 2. If someone reads two million waits as two million eBPF operations, they are misreading a polling loop.
+4) What connects libbpf, llvmlite and llc. Three stages, do not blur them. llvmlite builds IR from the decorated Python function; llc compiles that IR to a BPF object; libbpf then loads the object into the kernel and owns maps and the perf buffer at runtime. llvmlite and llc are build time and make the artifact; libbpf is runtime and consumes it. BCC has neither of the first two, since it compiles C at runtime, and its own loader replaces the third.
 
-Data: results/straceT, 2M count arm, strace -f -T unfiltered. Counts only, not durations.
+Still true: none of this is eBPF syscall work. bpf is 15 against 27, perf_event_open 4 against 4. The fds are the proof that both waits are the perf buffer.
+
+Data: results/straceT, 2M count arm, strace -f -T unfiltered.
 -->
 
 ---
@@ -602,64 +632,32 @@ Sources: evidence.txt sections 3 and 5; bcc/src/cc/export/helpers.h; pythonbpf/h
 layout: default
 ---
 
-# The enforcer, live — A/B
-
-<div class="grid grid-cols-2 gap-4 text-[12px]">
-
-<div>
-
-**Python-BPF** — print, read, kill
-
-```text
-GHOSTLOCK op=12 tag=3 pid=3132382
-ENFORCER signal op=12 tag=3 pid=3132382
-ENFORCER KILLED pid=3132382
-```
-
-userspace `os.kill`, after `trace_pipe`
-
-</div>
-
-<div>
-
-**BCC** — signal from the kernel
-
-```text
-GHOSTLOCK op=12 tag=3 pid=3185
-ENFORCER signalling SIGKILL pid=3185
-trigger rc = -9   (SIGKILL)
-```
-
-`bpf_send_signal`, one helper
-
-</div>
-
-</div>
-
-**tag 1** chain built · **tag 2** victim parks · **tag 3** trigger, the only kill
+# The enforcer, live — BCC
 
 <Editor
   session="ghostlock-enforce"
   defaultFolder="experiment/ghostlock"
   openFile="experiment/ghostlock/ghostlock_enforce_bcc.py"
-  :fontSize="11"
+  :fontSize="12"
   hideMinimap hideActivityBar hideStatusBar
   disableInitialFocus preload
-  class="h-[160px] w-full"
+  class="h-[415px] w-full"
 />
 
 <!--
-Open the BCC file, then the Python-BPF one beside it. Both watch kprobe/do_futex and tag the same three ops.
+Live. Open the BCC enforcer, then put ghostlock_enforce.py beside it to show the contrast.
 
-The tags are the exploit's own sequence, and they are worth naming once: tag 1 is FUTEX_LOCK_PI, the chain gets built; tag 2 is FUTEX_WAIT_REQUEUE_PI, the victim parks; tag 3 is FUTEX_CMP_REQUEUE_PI, the requeue that converts the victim's lock, which is the trigger. Tag 0 is everything else and is filtered out, which is why UNLOCK_PI never shows up.
+What the file does: watches kprobe/do_futex, tags the op set, and on tag 3 calls bpf_send_signal(SIGKILL). That is the helper Python-BPF does not have.
 
-Only tag 3 signals. Tags 1 and 2 share the pid: one process walking the attack.
+The tags, because the log will not explain them. They are the GhostLock exploit sequence: tag 1 is FUTEX_LOCK_PI, the chain gets built; tag 2 is FUTEX_WAIT_REQUEUE_PI, the victim parks; tag 3 is FUTEX_CMP_REQUEUE_PI, the requeue that converts the victim's lock, which is the trigger. Tag 0 is everything else and is filtered out, so UNLOCK_PI never appears. Only tag 3 signals, and tags 1 and 2 share one pid: a single process walking the attack.
 
-Python-BPF, left: the kernel program can only print. The line travels out through trace_pipe, userspace parses it, then calls os.kill. Three steps, and the log shows ENFORCER KILLED because userspace did it.
+Measured on vmnono, BCC 0.36.0: the trigger comes back rc = -9, SIGKILL, raised inside the program. No trace_pipe read, no userspace kill loop. The Python-BPF enforcer needs both, because it has no such helper.
 
-BCC, right: bpf_send_signal does it inside the program, and the trigger comes back rc = -9. Note the log says signalling, not killed. The kill leaves no line of its own: the task is gone before anything could print after it. So the program announces the decision before signalling, and the exit status is the proof.
+Say signalling, not killed. The kill leaves no line of its own: the task is gone before anything could print after it, so the program announces the decision before signalling and the exit status is the proof. The Python-BPF side can log ENFORCER KILLED after the fact, because userspace performs the kill there.
 
-Two build notes worth a sentence, because they are real friction: BCC cannot include linux/futex.h here (clang cannot emit mutex_init for BPF), and it cannot take a typed kprobe argument on this kernel, because BCC rewrites it to ctx->di and pt_regs is only forward-declared. The file carries a local pt_regs_x64 layout instead. Both are in evidence.txt section 5.
+Still a kill, not a deny. bpf_send_signal delivers on return from the probe, so do_futex has already run. A seccomp filter runs before the call, which is why it can deny where neither library can.
+
+Two build notes if asked: BCC cannot include linux/futex.h here (clang cannot emit mutex_init for BPF), and it cannot take a typed kprobe argument on this kernel, because BCC rewrites it to ctx->di and pt_regs is only forward-declared. The file carries a local pt_regs_x64 layout instead. Evidence section 5.
 
 The ordering point still stands for both. Neither denies.
 -->
@@ -865,8 +863,18 @@ layout: default
 
 Boundary: Python-BPF cannot deny a syscall in the kernel.
 
+<v-click>
+
+**Do you have any other idea based on this? Let us discuss.**
+
+</v-click>
+
 <!--
-The choice, from the October numbers only. Python-BPF wins startup, per-event CPU, syscalls per event and memory. BCC wins one thing today: a struct as a map value compiles in BCC and fails in Python-BPF. The boundary matters as much as the wins: Python-BPF cannot deny a syscall in the kernel, so it cannot enforce. For a deny job, choose a tool that can. For measurement, choose Python-BPF.
+The choice, from the October numbers only. Python-BPF wins startup, per-event CPU, syscalls per event and memory. BCC wins one thing today: a struct as a map value compiles in BCC and fails in Python-BPF.
+
+Then the boundary, and be precise. It is not that BCC denies and Python-BPF cannot: neither denies. BCC has bpf_send_signal, so enforcement can be raised from the kernel program instead of a userspace loop after a trace_pipe read. A hop removed, not a verdict. A seccomp filter runs before the syscall, which is why it can deny where neither library can.
+
+End on the question, then stop talking and let the room answer. That is the handover to Q&A, and the best answers come from people running these frameworks on workloads we have not tried.
 -->
 
 ---
