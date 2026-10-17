@@ -524,8 +524,12 @@ perf_event_open  4  1.91 ms  fd 9,10,11
 epoll_create1    1  0.03 ms  unused
 poll  1,978,114  1292.6 s
   [{fd=9},{fd=10},{fd=11}], 3, 1
-  data    1,876,744  0.622 ms
-  timeout   101,370  1.375 ms
+   = 0  101,370  timeout
+   = 1 1,846,789
+   = 2    28,922
+   = 3     1,032
+   = ?         1  EINTR
+  0.622 ms with data / 1.375 timeout
 ```
 
 </div>
@@ -539,9 +543,12 @@ perf_event_open  4  0.12 ms  fd 10,11,12
 epoll_create1    2  0.02 ms  fd 3, 9
 epoll_ctl        3  0.01 ms  fd 10,11,12 -> 9
 epoll_wait 2,037,562  1451.8 s
-  (9, [], 3, 1)  = 0
-  data    1,927,731  0.675 ms
-  timeout   109,831  1.373 ms
+  (9, [], 3, 1)
+   = 0  109,831  timeout
+   = 1 1,919,724
+   = 2     7,868
+   = 3       139
+  0.675 ms with data / 1.373 timeout
 ```
 
 </div>
@@ -550,7 +557,7 @@ epoll_wait 2,037,562  1451.8 s
 
 <v-click>
 
-95% of wakes bring data. The timeout case is the **same 1 ms** in both: 1.375 vs 1.373 ms.
+Return codes add up to the same story: `0` is the timer, `1..3` are the perf fds. BCC's poll sees more fds ready per call.
 
 </v-click>
 
