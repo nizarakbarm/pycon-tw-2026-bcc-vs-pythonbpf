@@ -513,45 +513,44 @@ layout: default
 .slidev-code { --slidev-code-font-size: 12px; --slidev-code-line-height: 1.1; }
 </style>
 
-| syscall | BCC | Python-BPF |
-|---|---|---|
-| `perf_event_open` | 4 calls, 1.91 ms | 4 calls, 0.12 ms |
-| `epoll_create1` | 1 call, 0.02 ms | 2 calls, 0.02 ms |
-| `epoll_ctl` | never called | 3 calls, 0.01 ms |
-| the wait | `poll` 0.660 ms | `epoll_wait` 0.713 ms |
-
 <div class="grid grid-cols-2 gap-6 text-[12px]">
 
 <div>
 
-**BCC** — own loader, own wait,
-no children under `-f`
+**BCC** — own loader, plain `poll`
 
 ```text
-perf_event_open -> fd 9, 10, 11
-poll([{fd=9},{fd=10},{fd=11}], 3, 1)
-  = 0 (Timeout)  x 1,978,114
+perf_event_open    4 calls   1.91 ms
+epoll_create1      1 call    0.03 ms
+poll       1,978,114 calls   0.660 ms each
+  -> 1305.7 s of 1375.2 s total
+all syscalls   3,913,286
 ```
 
 </div>
 
 <div>
 
-**Python-BPF** — three processes,
-two are `llc`, zero waits each
+**Python-BPF** — libbpf, epoll set
 
 ```text
-perf_event_open -> fd 10, 11, 12
-epoll_create1   -> fd 9
-epoll_ctl(9, ADD, 10/11/12)  x 3
-epoll_wait(9, [], 3, 1)     x 2,037,562
+perf_event_open    4 calls   0.12 ms
+epoll_create1      2 calls   0.02 ms
+epoll_ctl          3 calls   0.01 ms
+epoll_wait 2,037,562 calls   0.713 ms each
+  -> 1451.8 s of 1453.1 s total
+all syscalls   2,055,624
 ```
 
 </div>
 
 </div>
 
-Both return `0 (Timeout)`: the loop wakes on the timer, not per event. And it is **idle**, not spinning: 103.6 s CPU against 1768.6 s wall, 6%.
+<v-click>
+
+Both spend **all** their time in the wait. Both return `0 (Timeout)`.
+
+</v-click>
 
 <!--
 Every syscall in the code blocks has its time above, from the rank files: perf_event_open 1.91 ms against 0.12 ms, epoll_create1 0.02 ms both, epoll_ctl 0.01 ms and BCC never calls it, the wait 0.660 against 0.713 ms.
