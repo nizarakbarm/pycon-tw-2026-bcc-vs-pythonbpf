@@ -59,8 +59,16 @@ int do_futex_probe(void *ctx) {
 
     // The helper Python-BPF does not have. Queues a signal on return from this
     // probe, which is AFTER do_futex has already done its work.
-    if (tag == 3)
+    //
+    // The kill itself leaves no line: the program is gone before anything could
+    // print it, and the only trace is the child's exit status. So print the
+    // decision here, before signalling, and let the harness report the rc. The
+    // Python-BPF enforcer can log ENFORCER KILLED because userspace does the
+    // kill; this side has to announce it in advance.
+    if (tag == 3) {
+        bpf_trace_printk("ENFORCER signalling SIGKILL pid=%d\n", pid);
         bpf_send_signal(SIGKILL);
+    }
 
     return 0;
 }

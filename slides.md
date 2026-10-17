@@ -625,7 +625,8 @@ userspace `os.kill`, after `trace_pipe`
 **BCC** — signal from the kernel
 
 ```text
-GHOSTLOCK op=12 tag=3 pid=1577
+GHOSTLOCK op=12 tag=3 pid=3185
+ENFORCER signalling SIGKILL pid=3185
 trigger rc = -9   (SIGKILL)
 ```
 
@@ -635,6 +636,8 @@ trigger rc = -9   (SIGKILL)
 
 </div>
 
+**tag 1** chain built · **tag 2** victim parks · **tag 3** trigger, the only kill
+
 <Editor
   session="ghostlock-enforce"
   defaultFolder="experiment/ghostlock"
@@ -642,15 +645,19 @@ trigger rc = -9   (SIGKILL)
   :fontSize="11"
   hideMinimap hideActivityBar hideStatusBar
   disableInitialFocus preload
-  class="h-[175px] w-full"
+  class="h-[160px] w-full"
 />
 
 <!--
 Open the BCC file, then the Python-BPF one beside it. Both watch kprobe/do_futex and tag the same three ops.
 
-Python-BPF, left: the kernel program can only print. The line travels out through trace_pipe, userspace parses it, then calls os.kill. Three steps.
+The tags are the exploit's own sequence, and they are worth naming once: tag 1 is FUTEX_LOCK_PI, the chain gets built; tag 2 is FUTEX_WAIT_REQUEUE_PI, the victim parks; tag 3 is FUTEX_CMP_REQUEUE_PI, the requeue that converts the victim's lock, which is the trigger. Tag 0 is everything else and is filtered out, which is why UNLOCK_PI never shows up.
 
-BCC, right: bpf_send_signal does it inside the program. The measured result is trigger rc = -9. One helper, no read loop.
+Only tag 3 signals. Tags 1 and 2 share the pid: one process walking the attack.
+
+Python-BPF, left: the kernel program can only print. The line travels out through trace_pipe, userspace parses it, then calls os.kill. Three steps, and the log shows ENFORCER KILLED because userspace did it.
+
+BCC, right: bpf_send_signal does it inside the program, and the trigger comes back rc = -9. Note the log says signalling, not killed. The kill leaves no line of its own: the task is gone before anything could print after it. So the program announces the decision before signalling, and the exit status is the proof.
 
 Two build notes worth a sentence, because they are real friction: BCC cannot include linux/futex.h here (clang cannot emit mutex_init for BPF), and it cannot take a typed kprobe argument on this kernel, because BCC rewrites it to ctx->di and pt_regs is only forward-declared. The file carries a local pt_regs_x64 layout instead. Both are in evidence.txt section 5.
 
