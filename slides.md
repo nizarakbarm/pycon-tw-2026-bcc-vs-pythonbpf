@@ -571,50 +571,90 @@ Four gaps in Python-BPF, and one open question.
 layout: default
 ---
 
-# Limitation 1 — A thin helper surface, not a BCC win
+# Limitation 1 — BCC enforces in-kernel, Python-BPF cannot
 
-| mechanism | Python-BPF | BCC |
+Same job, two enforcement paths:
+
+| | Python-BPF | BCC |
 |---|---|---|
-| BPF-LSM program | no | no |
-| `bpf_override_return` | no | yes, helper present |
-| `bpf_send_signal` | no | yes, helper present |
+| raise the signal | userspace, after `trace_pipe` | `bpf_send_signal`, in kernel |
+| helpers available | 18 | 36 |
+| `bpf_send_signal` | absent | present |
+| result | `SIGKILL` from userspace | `SIGKILL`, trigger `rc = -9` |
 
-Neither library denies inside the kernel. BCC has the signal helper; Python-BPF has neither.
+Both kill the trigger. BCC needs no userspace hop.
 
 <!--
-The correction is the point of this slide. It is NOT that BCC can deny and Python-BPF cannot. BCC has no deny either: both libraries observe, neither enforces. What BCC has is more helpers, and two of them reach into enforcement: bpf_override_return and bpf_send_signal are both defined in BCC helpers.h, and neither exists in Python-BPF.
+This slide now rests on two runs, not on a helper list. Both are in evidence.txt: the Python-BPF enforcer as section 3, the BCC one as section 5.
 
-Count the surface: Python-BPF exposes 18 bpf_* helpers, BCC 36. Half. So the honest statement is that Python-BPF has a thinner helper surface than BCC, and the deny-capable helpers are two that BCC has and Python-BPF does not.
+Python-BPF path: the kernel program prints, trace_pipe carries the line to userspace, and the process calls os.kill. Three steps, and the kill is a userspace action.
 
-Not even BCC denies in the kernel for a general syscall. XDP drop is a verdict; a tracepoint is not. So for a real block, both frameworks do enforcement in userspace, and BCC at least has the signal helper to make that tidier.
+BCC path: bpf_send_signal raises the signal from inside the program. Measured today on vmnono with BCC 0.36.0: the trigger came back rc = -9, SIGKILL, with no userspace kill loop at all. Same probe point, kprobe/do_futex, same op set tagged 1/2/3.
 
-Source: 10-10, plus the helper lists in bcc/src/cc/export/helpers.h and pythonbpf/helper/.
+The honest boundary, and say this before someone asks. Neither library DENIES a syscall. bpf_send_signal delivers on return from the probe, so do_futex has already run. The ordering limit is identical to the Python-BPF version; what BCC removes is the round-trip, not the ordering. A seccomp filter runs before the call, which is why it can deny where neither can.
+
+Do not overclaim it as enforcement. It is a faster kill, not a block. The count is the honest measure of the gap: 18 helpers against 36.
+
+Sources: evidence.txt sections 3 and 5; bcc/src/cc/export/helpers.h; pythonbpf/helper/.
 -->
 
 ---
 layout: default
 ---
 
-# The enforcer, live
+# The enforcer, live — A/B
+
+<div class="grid grid-cols-2 gap-4 text-[12px]">
+
+<div>
+
+**Python-BPF** — print, read, kill
+
+```text
+GHOSTLOCK op=12 tag=3 pid=3132382
+ENFORCER signal op=12 tag=3 pid=3132382
+ENFORCER KILLED pid=3132382
+```
+
+userspace `os.kill`, after `trace_pipe`
+
+</div>
+
+<div>
+
+**BCC** — signal from the kernel
+
+```text
+GHOSTLOCK op=12 tag=3 pid=1577
+trigger rc = -9   (SIGKILL)
+```
+
+`bpf_send_signal`, one helper
+
+</div>
+
+</div>
 
 <Editor
   session="ghostlock-enforce"
   defaultFolder="experiment/ghostlock"
-  openFile="experiment/ghostlock/ghostlock_enforce.py"
-  :fontSize="12"
+  openFile="experiment/ghostlock/ghostlock_enforce_bcc.py"
+  :fontSize="11"
   hideMinimap hideActivityBar hideStatusBar
   disableInitialFocus preload
-  class="h-[415px] w-full"
+  class="h-[175px] w-full"
 />
 
 <!--
-Live. This is the real enforcer, from the GhostLock work, and it is what userspace enforcement looks like when the library has no deny helper.
+Open the BCC file, then the Python-BPF one beside it. Both watch kprobe/do_futex and tag the same three ops.
 
-The kernel program signals FUTEX_CMP_REQUEUE_PI (tag 3) with one printk. trace_pipe carries the line out, and this process sends SIGKILL. No in-kernel verdict anywhere.
+Python-BPF, left: the kernel program can only print. The line travels out through trace_pipe, userspace parses it, then calls os.kill. Three steps.
 
-Look at the order in the log. The trigger issues op=12 tag=3, and only after that does ENFORCER KILLED arrive. The kill lands after the syscall ran, so the vulnerable path has already executed by the time the process dies. A seccomp filter acts before the syscall, which is why it can deny where a kill cannot.
+BCC, right: bpf_send_signal does it inside the program. The measured result is trigger rc = -9. One helper, no read loop.
 
-Evidence: experiment/ghostlock/evidence.txt, section 3. Needs slidev dev; a static build shows a placeholder here.
+Two build notes worth a sentence, because they are real friction: BCC cannot include linux/futex.h here (clang cannot emit mutex_init for BPF), and it cannot take a typed kprobe argument on this kernel, because BCC rewrites it to ctx->di and pt_regs is only forward-declared. The file carries a local pt_regs_x64 layout instead. Both are in evidence.txt section 5.
+
+The ordering point still stands for both. Neither denies.
 -->
 
 ---
