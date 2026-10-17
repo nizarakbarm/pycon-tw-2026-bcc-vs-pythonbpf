@@ -510,7 +510,7 @@ layout: default
 # Both wait on the same perf fds
 
 <style>
-.slidev-code { --slidev-code-font-size: 12px; --slidev-code-line-height: 1.1; }
+.slidev-code { --slidev-code-font-size: 15px; --slidev-code-line-height: 1.3; }
 </style>
 
 <div class="grid grid-cols-2 gap-6 text-[12px]">
@@ -520,12 +520,12 @@ layout: default
 **BCC** — own loader, plain `poll`
 
 ```text
-poll  1,978,114 calls, 1292.6 s
-  data     1,876,744  0.622 ms
-  timeout    101,370  1.375 ms
-
-perf_event_open  4 calls  1.91 ms
-epoll_create1    1 call   0.03 ms  (never used)
+perf_event_open  4  1.91 ms  fd 9,10,11
+epoll_create1    1  0.03 ms  unused
+poll  1,978,114  1292.6 s
+  [{fd=9},{fd=10},{fd=11}], 3, 1
+  data    1,876,744  0.622 ms
+  timeout   101,370  1.375 ms
 ```
 
 </div>
@@ -535,13 +535,13 @@ epoll_create1    1 call   0.03 ms  (never used)
 **Python-BPF** — libbpf, epoll set
 
 ```text
-epoll_wait 2,037,562 calls, 1451.8 s
-  data     1,927,731  0.675 ms
-  timeout    109,831  1.373 ms
-
-perf_event_open  4 calls  0.12 ms
-epoll_create1    2 calls  0.02 ms
-epoll_ctl        3 calls  0.01 ms
+perf_event_open  4  0.12 ms  fd 10,11,12
+epoll_create1    2  0.02 ms  fd 3, 9
+epoll_ctl        3  0.01 ms  fd 10,11,12 -> 9
+epoll_wait 2,037,562  1451.8 s
+  (9, [], 3, 1)  = 0
+  data    1,927,731  0.675 ms
+  timeout   109,831  1.373 ms
 ```
 
 </div>
