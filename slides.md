@@ -520,11 +520,12 @@ layout: default
 **BCC** — own loader, plain `poll`
 
 ```text
-perf_event_open    4 calls   1.91 ms
-epoll_create1      1 call    0.03 ms
-poll       1,978,114 calls   0.660 ms each
-  -> 1305.7 s of 1375.2 s total
-all syscalls   3,913,286
+poll  1,978,114 calls, 1292.6 s
+  data     1,876,744  0.622 ms
+  timeout    101,370  1.375 ms
+
+perf_event_open  4 calls  1.91 ms
+epoll_create1    1 call   0.03 ms  (never used)
 ```
 
 </div>
@@ -534,12 +535,13 @@ all syscalls   3,913,286
 **Python-BPF** — libbpf, epoll set
 
 ```text
-perf_event_open    4 calls   0.12 ms
-epoll_create1      2 calls   0.02 ms
-epoll_ctl          3 calls   0.01 ms
-epoll_wait 2,037,562 calls   0.713 ms each
-  -> 1451.8 s of 1453.1 s total
-all syscalls   2,055,624
+epoll_wait 2,037,562 calls, 1451.8 s
+  data     1,927,731  0.675 ms
+  timeout    109,831  1.373 ms
+
+perf_event_open  4 calls  0.12 ms
+epoll_create1    2 calls  0.02 ms
+epoll_ctl        3 calls  0.01 ms
 ```
 
 </div>
@@ -548,14 +550,17 @@ all syscalls   2,055,624
 
 <v-click>
 
-Both spend **all** their time in the wait. Both return `0 (Timeout)`.
+95% of wakes bring data. The timeout case is the **same 1 ms** in both: 1.375 vs 1.373 ms.
 
 </v-click>
 
 <!--
-Every syscall in the code blocks has its time above, from the rank files: perf_event_open 1.91 ms against 0.12 ms, epoll_create1 0.02 ms both, epoll_ctl 0.01 ms and BCC never calls it, the wait 0.660 against 0.713 ms.
+The split matters, and it corrects what I said earlier. I claimed the loop wakes on its timer. Wrong: 95 percent of wakes carry data.
 
-Read the wait mean as the timeout, not as work: both loops wake on their own timer.
+poll, BCC: 1,876,744 calls with data at 0.622 ms, 101,370 timeouts at 1.375 ms. Total 1292.6 s.
+epoll_wait, Python-BPF: 1,927,731 with data at 0.675 ms, 109,831 timeouts at 1.373 ms. Total 1451.8 s.
+
+The timeout means match to three digits, 1.375 against 1.373 ms, which is the strongest evidence that both sit on the same 1 ms timer. The trigger bursts and then goes quiet, so about 5 percent of wakes hit the empty timer and the rest return with data immediately.
 
 1) Is there a time per syscall. Yes, strace -T recorded it. poll is 1305.694 s over 1,978,114 calls, 0.660 ms each. epoll_wait is 1451.765 s over 2,037,562 calls, 0.713 ms each. Both land on the 1 ms timeout, because both return 0 (Timeout). So the wait cost is the polling interval, not the framework.
 
@@ -567,7 +572,11 @@ Read the wait mean as the timeout, not as work: both loops wake on their own tim
 
 5) What happens after perf_buffer__poll returns. libbpf src/libbpf.c:11937. perf_buffer__poll is a thin wrapper: epoll_wait, then for each ready fd call perf_buffer__process_records, which walks the ring and hands each record to the callback we registered. No framework magic. BCC has the same shape with its own poll.
 
-6) Why epoll_create1 plus epoll_ctl beats a plain poll. Not speed at this size, and say that honestly: epoll_create1 is 0.02 ms, each epoll_ctl 0.01 ms, three of them, so under 0.1 ms of setup. The win is per-wait cost as the fd count grows. A plain poll copies the whole fd array in and scans it on return, so its cost scales with the number of fds. epoll registers once, keeps the set in the kernel, and returns only ready entries, so its cost scales with the number of READY fds. With three perf fds the two are equivalent, which is why 0.660 against 0.713 ms is noise. It matters when a process watches hundreds of fds, which is normal for a general-purpose loader and not for this program. Also note libbpf keeps BOTH: one epoll instance for the perf buffers, and a plain poll elsewhere in the same process.
+6) Does epoll beat a plain poll HERE. No, and say it plainly rather than implying otherwise. Per call: 0.622 against 0.675 ms with data, 1.375 against 1.373 ms on timeout. That 0.05 ms gap is noise, and the timeout figure is identical. The 2.9 percent difference in TOTAL (1292.6 against 1451.8 s) is not the syscall being slower, it is 3 percent more calls: 2,037,562 against 1,978,114. And the call count is wall time divided by the timeout, so Python-BPF simply ran 5 s longer, 1768.6 against 1763.6 s wall. Same trigger, same rate.
+
+So where is the benefit. Only as the fd count grows. A plain poll passes the whole fd array every call and the kernel scans all N on return, so cost is O(N) per wait. epoll registers once through epoll_ctl, the kernel keeps the set, and epoll_wait returns only the ready entries, so cost is O(ready). At three perf fds that is the same work, which is exactly why the two means match. At hundreds of fds it is the difference between scanning hundreds and scanning the two that are ready. libbpf is a general loader and may watch many buffers, so it uses epoll for that reason, not for speed here.
+
+Also note libbpf keeps both mechanisms in the same process: an epoll instance for the perf buffers, and a plain poll elsewhere. BCC contains an unused epoll_create1 it never registers anything with.
 
 7) When there is no data, is the task idle. Yes, and say it precisely, because it explains the numbers above. The timeout is 1 ms and the call BLOCKS for it: the task sleeps and is woken by the timer or by data. The log proves it. Poll loop CPU is 103.638 s against 1768.550 s wall, about 6 percent. So 94 percent of the run is a sleeping task, not a spinning one. A 1 ms timeout is a scheduling interval, not a busy-wait, which is why two million waits cost 0.66 to 0.71 ms each instead of burning a core.
 
