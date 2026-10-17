@@ -590,6 +590,23 @@ Also note libbpf keeps both mechanisms in the same process: an epoll instance fo
 Still true: none of this is eBPF syscall work. bpf is 15 against 27, perf_event_open 4 against 4. The fds are the proof that both waits are the perf buffer.
 
 Data: results/straceT, 2M count arm, strace -f -T unfiltered.
+
+8) Why is epoll_wait's MEAN higher if epoll is supposed to be more effective. It is not slower, and epoll is not losing. Separate the two numbers that look like speed.
+
+The timeout means are identical: 1.375 ms against 1.373 ms. That is the cleanest evidence available, because it is the syscall waiting the same 1 ms timer with nothing ready. At the syscall level the two cost the same.
+
+The whole 2.9 percent TOTAL gap is call count: 2,037,562 against 1,978,114. Call count is wall divided by interval, and this arm ran 5 s longer (1768.6 against 1763.6), so it simply made more calls for the same 2M events.
+
+The mean DATA case, 0.622 against 0.675 ms, is different for a second reason, and it is what each call FINDS rather than what the syscall costs. BCC returns with more fds ready per call: 28,922 double-ready and 1,032 triple, against 7,868 and 139. Its average call does more work and it returns less often.
+
+Why would BCC batch more. Look at what BCC does between waits. It calls gettid 1,907,735 times, once per event, where Python-BPF calls it 3 times at startup. All that extra syscall work means BCC arrives back at poll later, by which time more perf fds have filled. So the batching is a consequence of BCC being busier in-process, not of poll being better.
+
+Read the 1-ready share to see this: 98.4 percent for BCC, 99.6 percent for Python-BPF. Python-BPF mostly returns with exactly one fd ready, which is the efficient case. It consumes events promptly and comes back.
+
+Where epoll would actually show its benefit: not here, and the slide says so. With three fds the two are equivalent by construction, poll being O(N) per wait and epoll_wait O(ready), with N equal to 3. The benefit needs N large, hundreds of fds, where poll must copy and scan the whole array every call while epoll returns only the ready entries. libbpf uses epoll because it is a general-purpose loader that may watch many buffers, not because it wins at three.
+
+Also note neither framework optimised this path. BCC built an epoll instance with epoll_create1 and never registered anything in it, then polled anyway.
+
 -->
 
 ---
