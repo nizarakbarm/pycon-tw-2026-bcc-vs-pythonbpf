@@ -7,6 +7,8 @@ colorSchema: dark
 highlighter: shiki
 shikiOptions:
   theme: nord
+features:
+  katex: true
 addons:
   - slidev-addon-livecode
 ---
@@ -289,40 +291,6 @@ layout: default
 
 <!--
 Live. The runner: one arm at a time. It starts the program, sleeps a pre-wait for safety, then waits until the program reports that it is polling before it fires the trigger. That gate matters - a fixed pre-sleep can expire before attach and lose the trigger's whole burst with no LOST line. After the trigger it drains for T, then sends SIGINT and waits for the program to exit. The two arm calls at the end pass 2 s for BCC and 1 s for Python-BPF. This slide needs slidev dev; a static build shows a placeholder here.
--->
-
----
-layout: default
----
-
-# What happens between start and stop?
-
-<v-clicks>
-
-1. Does BCC get 2 s before the trigger?
-2. Does Python-BPF get 1 s before the trigger?
-3. Do the 0.5 s and 2 s waits do any work?
-4. Does the trigger run at the same speed for both programs?
-
-</v-clicks>
-
-<!--
-Before any result, look at the measurement itself. A run has four parts, and the two slides that used to sit here now live in this note.
-
-The four parts:
-| part | value |
-| wait before the trigger | BCC 2 s, Python-BPF 1 s |
-| trigger | measured |
-| 0.5 s after the trigger | 0.5 s |
-| 2 s after SIGINT | 2 s |
-
-The answers, in order. Q1 and Q2: the waits are BCC 2 s and Python-BPF 1 s. Q3: the idle waits hold no work, they only drain and close the program. Q4: the trigger runs at the same speed for both programs.
-
-Why the two waits differ. The wait before the trigger is a bash sleep we set for safety, not a measured cost. Each value sits well above that framework's init, 0.4 s and 0.02 s, so the program is up before the trigger fires. The rule: sleep longer than init. The gap between 2 s and 1 s is the start-time difference, not a harness cost. Source: experiment/scripts/rebenc_unprof.sh, the arm calls at the end of the file.
-
-Three questions to ask out loud: which program starts faster; does the wait cover each program's own start time; why does BCC need more time to start. The next slide answers them.
-
-Every number in this deck is CPU time, not wall time, because the trigger sets the pace.
 -->
 
 ---
@@ -628,6 +596,51 @@ Two findings on this slide. First the wall-versus-CPU gap. Second, one line that
 One line changed the result: Python-BPF flushed every print. Removing that cut its system time 39 percent. Total CPU fell 21 percent. Source: 10-08, a run outside the packaged tree; the six programs in results/ carry no flush=True and the dataset README records the removal for this reason.
 
 Data: results/unprofiled, 2M count arm, [TIMING]. Wall is 1763.6 s for BCC and 1768.6 s for Python-BPF, a 5 s gap, 0.3 percent. CPU is 134.6 s against 103.7 s, a 30.9 s gap, 30 percent. The trigger is a sequential fork and wait loop, about 0.7 ms per event, so it runs for about 24 minutes and both frameworks sit behind it. Wall therefore measures the trigger, not the framework.
+-->
+
+---
+layout: default
+---
+
+# What makes up wall time?
+
+$$
+\text{wall} = pre + T + 0.5 + t_{init} + t_{trigger} + t_{poll}
+$$
+
+| term | value | who pays |
+|---|---|---|
+| `pre` | 2 s / 1 s | bash, fixed |
+| `T` | 0.5 s | bash, fixed |
+| `0.5` | 0.5 s | bash, per retry |
+| `t_init` | 0.45 / 0.02 s | **the framework** |
+| `t_trigger` | ~1400 s | the program |
+| `t_poll` | 1763.6 / 1768.6 s | **the framework** |
+
+Only `t_init` and `t_poll` differ. The trigger dominates.
+
+<!--
+Before any result, account for the measurement. Every term on the slide is from experiment/scripts/rebenc_unprof.sh, the arm function.
+
+Read the formula left to right, in the order the runner executes it.
+
+pre is the bash sleep after the program is launched, 2 s for BCC and 1 s for Python-BPF. Fixed by us, not measured.
+
+Then the GATE: the runner does not fire on the fixed sleep alone. It polls the log for the program to report it is polling, sleeping 0.5 s per attempt, up to 120 attempts. That is why 0.5 appears as its own term, and why the real wait can be longer than pre if a program is slow to attach. The gate exists because a fixed pre-sleep can expire before attach under strace or perf, and the trigger's whole burst is then lost with no [LOST] line to warn you.
+
+t_init is the framework's own startup, 0.45 s for BCC against 0.02 s for Python-PBF. That is the one number on this slide the frameworks control at start.
+
+t_trigger is the trigger program, sudo -u TRIG_USER running the binary with N events. At 2M it is about 1400 seconds, and it is sequential, so it sets the pace for everything after it.
+
+T is the bash drain after the trigger, 0.5 s, fixed.
+
+t_poll is the program's poll loop from the log, 1763.6 s for BCC and 1768.6 s for Python-PBF. Note it is larger than t_trigger because the poll starts before the trigger and ends after the drain.
+
+Then teardown: SIGINT, then the runner waits in 0.5 s steps up to 20 s for the child to exit.
+
+The point is that only two terms differ between the frameworks, t_init and t_poll, and both are inside the program. Every other term is identical by construction. So if wall differs between arms, it is not the harness.
+
+Every number in this deck is CPU time, not wall time, because the trigger sets the pace.
 -->
 
 ---
